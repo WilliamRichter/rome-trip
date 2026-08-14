@@ -1,0 +1,354 @@
+import { useEffect, useState } from "react";
+import { supabase } from "./lib/supabaseClient";
+import { tripDays, events } from "./data/tripData";
+import "./styles.css";
+import TripMap from "./components/TripMap";
+
+const categorySymbols = {
+  museum: "◆",
+  food: "●",
+  activity: "✦",
+  drinks: "◉",
+};
+
+function App() {
+  const [selectedDate, setSelectedDate] = useState("2026-12-30");
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [manageMode, setManageMode] = useState(false);
+  const [allEvents, setAllEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const [form, setForm] = useState({
+    name: "",
+    category: "activity",
+    startTime: "",
+    locationName: "",
+    latitude: "",
+    longitude: "",
+  });
+  const selectedDay = tripDays.find(
+    (day) => day.date === selectedDate
+  );
+
+  const dayEvents = allEvents
+    .filter((event) => event.date === selectedDate)
+    .sort((a, b) => a.startTime.localeCompare(b.startTime));
+
+  function handleFormChange(event) {
+  const { name, value } = event.target;
+
+  setForm((current) => ({
+    ...current,
+    [name]: value,
+  }));
+}
+
+async function handleAddEvent(event) {
+  event.preventDefault();
+
+  const databaseEvent = {
+    date: selectedDate,
+    name: form.name,
+    category: form.category,
+    start_time: form.startTime,
+    location_name: form.locationName,
+    latitude: Number(form.latitude),
+    longitude: Number(form.longitude),
+  };
+
+  const { data, error } = await supabase
+    .from("events")
+    .insert(databaseEvent)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error adding event:", error);
+    return;
+  }
+
+  const newEvent = {
+    id: data.id,
+    date: data.date,
+    name: data.name,
+    category: data.category,
+    startTime: data.start_time,
+    locationName: data.location_name,
+    latitude: data.latitude,
+    longitude: data.longitude,
+  };
+
+  setAllEvents((current) => [...current, newEvent]);
+
+  setForm({
+    name: "",
+    category: "activity",
+    startTime: "",
+    locationName: "",
+    latitude: "",
+    longitude: "",
+  });
+}
+
+async function handleDeleteEvent(id) {
+  const { error } = await supabase
+    .from("events")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.error("Error deleting event:", error);
+    return;
+  }
+
+  setAllEvents((current) =>
+    current.filter((event) => event.id !== id)
+  );
+
+  if (selectedEvent === id) {
+    setSelectedEvent(null);
+  }
+}
+
+useEffect(() => {
+  async function loadEvents() {
+    const { data, error } = await supabase
+      .from("events")
+      .select("*")
+      .order("start_time", { ascending: true });
+
+    if (error) {
+      console.error("Error loading events:", error);
+    } else {
+      const formattedEvents = data.map((event) => ({
+        id: event.id,
+        date: event.date,
+        startTime: event.start_time,
+        name: event.name,
+        category: event.category,
+        locationName: event.location_name,
+        latitude: event.latitude,
+        longitude: event.longitude,
+      }));
+
+      setAllEvents(formattedEvents);
+    }
+
+    setLoading(false);
+  }
+
+  loadEvents();
+}, []);
+
+  return (
+    <div className="app">
+
+      <header className="hero">
+        <p className="eyebrow">FAMILY TRIP</p>
+
+        <h1>ROMA</h1>
+
+        <p className="trip-dates">
+          29 DECEMBER 2026 — 3 JANUARY 2027
+        </p>
+      </header>
+
+      <nav className="day-selector">
+        {tripDays.map((day) => (
+          <button
+            key={day.date}
+            className={
+              selectedDate === day.date
+                ? "day-button active"
+                : "day-button"
+            }
+            onClick={() => {
+              setSelectedDate(day.date);
+              setSelectedEvent(null);
+            }}
+          >
+            <span>{day.weekday}</span>
+            <strong>{day.shortDate}</strong>
+          </button>
+        ))}
+      </nav>
+
+      <main className="content">
+
+  <section className="itinerary-panel">
+
+    <div className="day-header">
+      <div>
+        <p className="eyebrow">TODAY'S PLAN</p>
+
+        <h2>
+          {selectedDay.weekday} {selectedDay.shortDate}
+        </h2>
+      </div>
+
+      <div className="owner">
+        Hosted by{" "}
+        <strong>
+          {selectedDay.owners.join(" & ")}
+        </strong>
+      </div>
+    </div>
+
+    <div className="events">
+
+      {dayEvents.length === 0 && (
+        <div className="empty">
+          Nothing planned yet.
+        </div>
+      )}
+
+      {dayEvents.map((event) => (
+        <div
+          className={
+            selectedEvent === event.id
+              ? "event-card selected"
+              : "event-card"
+          }
+          key={event.id}
+          onClick={() => setSelectedEvent(event.id)}
+        >
+
+          <div className="event-time">
+            {event.startTime}
+          </div>
+
+          <div className="event-symbol">
+            {categorySymbols[event.category] || "○"}
+          </div>
+
+          <div className="event-details">
+            <div className="category">
+              {event.category}
+            </div>
+
+            <h3>{event.name}</h3>
+
+            <p>{event.locationName}</p>
+
+            {manageMode && (
+              <button
+                className="delete-button"
+                onClick={(clickEvent) => {
+                  clickEvent.stopPropagation();
+                  handleDeleteEvent(event.id);
+                }}
+              >
+                Delete
+              </button>
+            )}
+          </div>
+
+        </div>
+      ))}
+
+    </div>
+    <button
+  className="manage-button"
+  onClick={() => setManageMode((current) => !current)}
+>
+  {manageMode ? "Done managing" : "Manage this day"}
+</button>
+{manageMode && (
+  <form className="event-form" onSubmit={handleAddEvent}>
+
+    <h3>Add event</h3>
+
+    <label>
+      Name
+      <input
+        name="name"
+        value={form.name}
+        onChange={handleFormChange}
+        required
+      />
+    </label>
+
+    <label>
+      Category
+      <select
+        name="category"
+        value={form.category}
+        onChange={handleFormChange}
+      >
+        <option value="activity">Activity</option>
+        <option value="museum">Museum</option>
+        <option value="food">Food</option>
+        <option value="drinks">Drinks</option>
+      </select>
+    </label>
+
+    <label>
+      Start time
+    <input
+      type="text"
+      name="startTime"
+      value={form.startTime}
+      onChange={handleFormChange}
+      placeholder="e.g. 18:30"
+      pattern="([01][0-9]|2[0-3]):[0-5][0-9]"
+      title="Enter time in 24-hour format, e.g. 18:30"
+      required
+    />
+    </label>
+
+    <label>
+      Location
+      <input
+        name="locationName"
+        value={form.locationName}
+        onChange={handleFormChange}
+        required
+      />
+    </label>
+
+    <label>
+      Latitude
+      <input
+        type="number"
+        step="any"
+        name="latitude"
+        value={form.latitude}
+        onChange={handleFormChange}
+        required
+      />
+    </label>
+
+    <label>
+      Longitude
+      <input
+        type="number"
+        step="any"
+        name="longitude"
+        value={form.longitude}
+        onChange={handleFormChange}
+        required
+      />
+    </label>
+
+    <button type="submit">
+      Add event
+    </button>
+
+  </form>
+)}
+  </section>
+
+  <section className="map-panel">
+    <TripMap
+  events={dayEvents}
+  selectedEvent={selectedEvent}
+  onSelectEvent={setSelectedEvent}
+/>
+  </section>
+
+</main>
+    </div>
+  );
+}
+
+export default App;

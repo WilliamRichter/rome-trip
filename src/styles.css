@@ -1,0 +1,284 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f2eee6;
+  color: #24211d;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button {
+  font: inherit;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+/* HEADER */
+
+.hero {
+  padding: 64px 8vw 45px;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  opacity: 0.5;
+}
+
+.hero h1 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: clamp(70px, 12vw, 140px);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+}
+
+.trip-dates {
+  margin-top: 25px;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+
+/* DAY NAVIGATION */
+
+.day-selector {
+  display: flex;
+  padding: 0 8vw;
+  overflow-x: auto;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.day-button {
+  min-width: 90px;
+  padding: 18px 22px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.day-button span {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  opacity: 0.45;
+}
+
+.day-button strong {
+  font-family: Georgia, serif;
+  font-size: 30px;
+  font-weight: 400;
+}
+
+.day-button.active {
+  border-bottom-color: #963c32;
+}
+
+/* ITINERARY */
+
+.content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(400px, 0.9fr);
+  min-height: 650px;
+}
+
+.day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.day-header h2 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: 42px;
+  font-weight: 400;
+}
+
+.owner {
+  font-size: 13px;
+  opacity: 0.55;
+}
+
+.event-card {
+  display: grid;
+  grid-template-columns: 80px 30px 1fr;
+  width: 100%;
+  padding: 25px 5px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.event-time {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.event-symbol {
+  color: #963c32;
+}
+
+.category {
+  margin-bottom: 5px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  opacity: 0.4;
+}
+
+.event-details h3 {
+  margin: 0 0 5px;
+  font-family: Georgia, serif;
+  font-size: 25px;
+  font-weight: 400;
+}
+
+.event-details p {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.55;
+}
+
+.empty {
+  padding: 35px 0;
+  opacity: 0.4;
+}
+
+.event-card {
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.event-card:hover {
+  background: rgba(0, 0, 0, 0.025);
+}
+
+.event-card.selected {
+  background: rgba(150, 60, 50, 0.08);
+  transform: translateX(5px);
+}
+
+@media (max-width: 650px) {
+  .hero {
+    padding-top: 45px;
+  }
+
+  .day-selector {
+    padding-left: 4vw;
+  }
+
+  .day-button {
+    min-width: 72px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .day-header {
+    display: block;
+  }
+
+  .owner {
+    margin-top: 10px;
+  }
+
+  .event-card {
+    grid-template-columns: 65px 25px 1fr;
+  }
+  .content {
+  display: block;
+}
+
+    .map-panel,
+    .map {
+    min-height: 430px;
+    height: 430px;
+    }
+}
+
+    .itinerary-panel {
+    padding: 55px 8vw;
+}
+
+    .map-panel {
+    min-height: 650px;
+}
+
+    .map {
+    width: 100%;
+    height: 100%;
+    min-height: 650px;
+}
+
+.manage-button {
+  margin-top: 32px;
+  padding: 12px 18px;
+  border: 1px solid #24211d;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.delete-button {
+  margin-top: 12px;
+  padding: 7px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(150, 60, 50, 0.1);
+  color: #963c32;
+  cursor: pointer;
+}
+
+.event-form {
+  margin-top: 35px;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.45);
+  color: #24211d;
+  border-radius: 18px;
+}
+
+.event-form h3 {
+  margin-top: 0;
+  font-family: Georgia, serif;
+  font-size: 28px;
+  font-weight: 400;
+}
+
+.event-form label {
+  display: block;
+  margin-bottom: 18px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.event-form input,
+.event-form select {
+  width: 100%;
+  margin-top: 7px;
+  padding: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  background: white;
+  color: #24211d;
+  font: inherit;
+}
+
+.event-form button[type="submit"] {
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: #963c32;
+  color: white;
+  cursor: pointer;
+}
