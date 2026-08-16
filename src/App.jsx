@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabaseClient";
-import { tripDays, events } from "./data/tripData";
+import { tripDays, staticPlaces } from "./data/tripData";
+import { SearchBox } from "@mapbox/search-js-react";
 import "./styles.css";
 import TripMap from "./components/TripMap";
 
@@ -17,6 +18,8 @@ function App() {
   const [manageMode, setManageMode] = useState(false);
   const [allEvents, setAllEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
   const [form, setForm] = useState({
     name: "",
@@ -45,6 +48,10 @@ function App() {
 
 async function handleAddEvent(event) {
   event.preventDefault();
+  if (!form.latitude || !form.longitude) {
+  alert("Please choose a place from the search suggestions.");
+  return;
+}
 
   const databaseEvent = {
     date: selectedDate,
@@ -139,6 +146,24 @@ useEffect(() => {
 
   loadEvents();
 }, []);
+
+function handlePlaceSelected(result) {
+  const feature = result.features?.[0];
+
+  if (!feature) return;
+
+  const [longitude, latitude] = feature.geometry.coordinates;
+
+  setForm((current) => ({
+    ...current,
+    locationName:
+      feature.properties?.name ||
+      feature.properties?.full_address ||
+      "Selected place",
+    latitude,
+    longitude,
+  }));
+}
 
   return (
     <div className="app">
@@ -297,38 +322,49 @@ useEffect(() => {
     </label>
 
     <label>
-      Location
-      <input
-        name="locationName"
+      Place
+
+      <SearchBox
+        accessToken={mapboxToken}
         value={form.locationName}
-        onChange={handleFormChange}
-        required
+        onChange={(value) =>
+          setForm((current) => ({
+            ...current,
+            locationName: value,
+            latitude: "",
+            longitude: "",
+          }))
+        }
+        onRetrieve={handlePlaceSelected}
+        placeholder="Search Rome..."
+        options={{
+          language: "en",
+          country: "IT",
+
+          // Restrict results to Rome
+          bbox: [
+            12.35,  // west
+            41.78,  // south
+            12.65,  // east
+            42.02,  // north
+          ],
+
+          // Prioritize central Rome within that area
+          proximity: {
+            lng: 12.4964,
+            lat: 41.9028,
+          },
+
+          limit: 6,
+        }}
       />
     </label>
 
-    <label>
-      Latitude
-      <input
-        type="number"
-        step="any"
-        name="latitude"
-        value={form.latitude}
-        onChange={handleFormChange}
-        required
-      />
-    </label>
-
-    <label>
-      Longitude
-      <input
-        type="number"
-        step="any"
-        name="longitude"
-        value={form.longitude}
-        onChange={handleFormChange}
-        required
-      />
-    </label>
+    {form.latitude && form.longitude && (
+  <div className="place-confirmation">
+    ✓ Location selected
+  </div>
+)}
 
     <button type="submit">
       Add event
@@ -341,6 +377,7 @@ useEffect(() => {
   <section className="map-panel">
     <TripMap
   events={dayEvents}
+  staticPlaces={staticPlaces}
   selectedEvent={selectedEvent}
   onSelectEvent={setSelectedEvent}
 />

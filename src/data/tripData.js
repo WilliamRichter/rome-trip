@@ -39,3 +39,22 @@ export const events = [
     longitude: 12.4833,
   },
 ];
+
+export const staticPlaces = [
+  {
+    id: "hotel",
+    name: "Family Hotel",
+    type: "hotel",
+    latitude: 41.89439362872292,
+    longitude: 12.463107454999244,
+    description: "Main family hotel",
+  },
+  {
+    id: "apartment",
+    name: "Franco Richters' Apartment",
+    type: "apartment",
+    latitude: 41.89669103691434,
+    longitude: 12.464601485684447,
+    description: "Apartment for sister and family",
+  },
+];

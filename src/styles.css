@@ -28,7 +28,8 @@ button {
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.18em;
-  opacity: 0.5;
+  color: #24211d;
+  opacity: 1;
 }
 
 .hero h1 {
@@ -38,6 +39,7 @@ button {
   font-weight: 400;
   line-height: 0.9;
   letter-spacing: -0.06em;
+  color: #24211d;
 }
 
 .trip-dates {
@@ -104,6 +106,7 @@ button {
   font-family: Georgia, serif;
   font-size: 42px;
   font-weight: 400;
+  color: #24211d;
 }
 
 .owner {
@@ -227,6 +230,7 @@ button {
   border: 1px solid #24211d;
   border-radius: 999px;
   background: transparent;
+  color: #24211d;
   cursor: pointer;
 }
 
@@ -281,4 +285,38 @@ button {
   background: #963c32;
   color: white;
   cursor: pointer;
+}
+
+.static-place-marker {
+  background: transparent;
+  border: none;
+}
+
+.static-marker-icon {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #24211d;
+  color: #f2eee6;
+
+  border: 3px solid #f2eee6;
+  border-radius: 50%;
+
+  font-family: Georgia, serif;
+  font-size: 16px;
+  font-weight: bold;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.place-confirmation {
+  margin-top: -10px;
+  margin-bottom: 18px;
+  font-size: 12px;
+  color: #24211d;
+  opacity: 0.65;
 }
