@@ -208,6 +208,15 @@ button {
     min-height: 430px;
     height: 430px;
     }
+
+    .overview-day-card {
+  grid-template-columns: 60px 1fr 25px;
+  padding: 20px 16px;
+}
+
+.overview-heading h2 {
+  font-size: 34px;
+}
 }
 
     .itinerary-panel {
@@ -319,4 +328,151 @@ button {
   font-size: 12px;
   color: #24211d;
   opacity: 0.65;
+}
+
+.overview {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 55px 8vw 80px;
+}
+
+.overview-heading {
+  margin-bottom: 35px;
+}
+
+.overview-heading h2 {
+  margin: 5px 0 0;
+  font-family: Georgia, serif;
+  font-size: 42px;
+  font-weight: 400;
+  color: #24211d;
+}
+
+.overview-days {
+  display: grid;
+  gap: 12px;
+}
+
+.overview-day-card {
+  display: grid;
+  grid-template-columns: 90px 1fr 40px;
+  align-items: center;
+  width: 100%;
+
+  padding: 24px 26px;
+
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.35);
+  color: #24211d;
+
+  text-align: left;
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.overview-day-card:hover {
+  transform: translateX(4px);
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.overview-date span {
+  display: block;
+  margin-bottom: 3px;
+
+  font-size: 10px;
+  letter-spacing: 0.15em;
+
+  opacity: 0.5;
+}
+
+.overview-date strong {
+  font-family: Georgia, serif;
+  font-size: 34px;
+  font-weight: 400;
+}
+
+.overview-day-content {
+  display: grid;
+  gap: 12px;
+}
+
+.overview-owner {
+  font-size: 13px;
+}
+
+.overview-arrival {
+  display: flex;
+  gap: 15px;
+
+  padding: 10px 0;
+
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+  font-size: 13px;
+}
+
+.overview-time {
+  min-width: 50px;
+  font-weight: 700;
+}
+
+.overview-event-count {
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+.overview-arrow {
+  font-size: 24px;
+  opacity: 0.35;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  margin-bottom: 30px;
+  padding: 10px 16px;
+
+  border: 1px solid rgba(36, 33, 29, 0.25);
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.45);
+  color: #24211d;
+
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(36, 33, 29, 0.5);
+  transform: translateX(-2px);
+}
+
+.detail-navigation {
+  padding: 20px 8vw 0;
+}
+
+.detail-navigation .back-button {
+  margin-bottom: 16px;
+}
+
+.event-address {
+  margin-top: 4px !important;
+  font-size: 12px !important;
+  opacity: 0.4 !important;
 }

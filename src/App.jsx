@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabaseClient";
-import { tripDays, staticPlaces } from "./data/tripData";
+import {
+  tripDays,
+  staticPlaces,
+  arrivals
+ } from "./data/tripData";
 import { SearchBox } from "@mapbox/search-js-react";
 import "./styles.css";
 import TripMap from "./components/TripMap";
@@ -13,6 +17,7 @@ const categorySymbols = {
 };
 
 function App() {
+  const [viewMode, setViewMode] = useState("overview");
   const [selectedDate, setSelectedDate] = useState("2026-12-30");
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [manageMode, setManageMode] = useState(false);
@@ -26,6 +31,7 @@ function App() {
     category: "activity",
     startTime: "",
     locationName: "",
+    address: "",
     latitude: "",
     longitude: "",
   });
@@ -59,6 +65,7 @@ async function handleAddEvent(event) {
     category: form.category,
     start_time: form.startTime,
     location_name: form.locationName,
+    address: form.address,
     latitude: Number(form.latitude),
     longitude: Number(form.longitude),
   };
@@ -81,6 +88,7 @@ async function handleAddEvent(event) {
     category: data.category,
     startTime: data.start_time,
     locationName: data.location_name,
+    address: data.address,
     latitude: data.latitude,
     longitude: data.longitude,
   };
@@ -134,6 +142,7 @@ useEffect(() => {
         name: event.name,
         category: event.category,
         locationName: event.location_name,
+        address: event.address,
         latitude: event.latitude,
         longitude: event.longitude,
       }));
@@ -154,15 +163,27 @@ function handlePlaceSelected(result) {
 
   const [longitude, latitude] = feature.geometry.coordinates;
 
-  setForm((current) => ({
-    ...current,
-    locationName:
-      feature.properties?.name ||
-      feature.properties?.full_address ||
-      "Selected place",
-    latitude,
-    longitude,
-  }));
+setForm((current) => ({
+  ...current,
+  locationName:
+    feature.properties?.name ||
+    "Selected place",
+
+  address:
+    feature.properties?.full_address ||
+    feature.properties?.place_formatted ||
+    "",
+
+  latitude,
+  longitude,
+}));
+}
+
+function openDay(date) {
+  setSelectedDate(date);
+  setSelectedEvent(null);
+  setManageMode(false);
+  setViewMode("day");
 }
 
   return (
@@ -177,7 +198,77 @@ function handlePlaceSelected(result) {
           29 DECEMBER 2026 — 3 JANUARY 2027
         </p>
       </header>
+      {viewMode === "overview" ? (
+  <main className="overview">
+    <div className="overview-heading">
+      <p className="eyebrow">THE STAY AT A GLANCE</p>
+      <h2>29 December — 3 January</h2>
+    </div>
 
+    <div className="overview-days">
+      {tripDays.map((day) => {
+        const arrivalsForDay = arrivals.filter(
+          (arrival) => arrival.date === day.date
+        );
+
+        const eventsForDay = allEvents.filter(
+          (event) => event.date === day.date
+        );
+
+        return (
+          <button
+            key={day.date}
+            className="overview-day-card"
+            onClick={() => openDay(day.date)}
+          >
+            <div className="overview-date">
+              <span>{day.weekday}</span>
+              <strong>{day.shortDate}</strong>
+            </div>
+
+            <div className="overview-day-content">
+              <div className="overview-owner">
+                Hosted by{" "}
+                <strong>{day.owners.join(" & ")}</strong>
+              </div>
+
+              {arrivalsForDay.map((arrival) => (
+                <div
+                  key={arrival.id}
+                  className="overview-arrival"
+                >
+                  <span className="overview-time">
+                    {arrival.time}
+                  </span>
+
+                  <div>
+                    <strong>{arrival.people}</strong>
+                    <div>{arrival.detail}</div>
+                  </div>
+                </div>
+              ))}
+
+              <div className="overview-event-count">
+                {eventsForDay.length} activities planned
+              </div>
+            </div>
+
+            <div className="overview-arrow">→</div>
+          </button>
+        );
+      })}
+    </div>
+  </main>
+) : (
+  <>
+    <div className="detail-navigation">
+    <button
+      className="back-button"
+      onClick={() => setViewMode("overview")}
+    >
+      ← Back to overview
+    </button>
+  </div>
       <nav className="day-selector">
         {tripDays.map((day) => (
           <button
@@ -201,6 +292,7 @@ function handlePlaceSelected(result) {
       <main className="content">
 
   <section className="itinerary-panel">
+
 
     <div className="day-header">
       <div>
@@ -254,6 +346,11 @@ function handlePlaceSelected(result) {
             <h3>{event.name}</h3>
 
             <p>{event.locationName}</p>
+            {event.address && (
+              <p className="event-address">
+                {event.address}
+              </p>
+            )}
 
             {manageMode && (
               <button
@@ -384,6 +481,8 @@ function handlePlaceSelected(result) {
   </section>
 
 </main>
+  </>
+)}
     </div>
   );
 }

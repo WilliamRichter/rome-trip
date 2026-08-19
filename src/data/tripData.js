@@ -1,7 +1,7 @@
 export const tripDays = [
   { date: "2026-12-29", shortDate: "29", weekday: "TUE", owners: ["Person A"] },
   { date: "2026-12-30", shortDate: "30", weekday: "WED", owners: ["Person B"] },
-  { date: "2026-12-31", shortDate: "31", weekday: "THU", owners: ["Person C"] },
+  { date: "2026-12-31", shortDate: "31", weekday: "THU", owners: ["William", "Paula"] },
   { date: "2027-01-01", shortDate: "01", weekday: "FRI", owners: ["Person D"] },
   { date: "2027-01-02", shortDate: "02", weekday: "SAT", owners: ["Person E"] },
   { date: "2027-01-03", shortDate: "03", weekday: "SUN", owners: ["Person F"] },
@@ -51,10 +51,34 @@ export const staticPlaces = [
   },
   {
     id: "apartment",
-    name: "Franco Richters' Apartment",
+    name: "Franco Richter's Apartment",
     type: "apartment",
     latitude: 41.89669103691434,
     longitude: 12.464601485684447,
     description: "Apartment for sister and family",
+  },
+];
+
+export const arrivals = [
+  {
+    id: 1,
+    date: "2026-12-29",
+    time: "14:20",
+    people: "Person A + Person B",
+    detail: "Arrive in Rome",
+  },
+  {
+    id: 2,
+    date: "2026-12-29",
+    time: "17:10",
+    people: "Person C + Partner",
+    detail: "Arrive in Rome",
+  },
+  {
+    id: 3,
+    date: "2026-12-30",
+    time: "11:00",
+    people: "Person D + family",
+    detail: "Arrive in Rome",
   },
 ];
