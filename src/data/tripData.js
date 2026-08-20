@@ -1,10 +1,9 @@
 export const tripDays = [
-  { date: "2026-12-29", shortDate: "29", weekday: "TUE", owners: ["Person A"] },
-  { date: "2026-12-30", shortDate: "30", weekday: "WED", owners: ["Person B"] },
-  { date: "2026-12-31", shortDate: "31", weekday: "THU", owners: ["William", "Paula"] },
-  { date: "2027-01-01", shortDate: "01", weekday: "FRI", owners: ["Person D"] },
-  { date: "2027-01-02", shortDate: "02", weekday: "SAT", owners: ["Person E"] },
-  { date: "2027-01-03", shortDate: "03", weekday: "SUN", owners: ["Person F"] },
+  { date: "2026-12-30", shortDate: "30", weekday: "WED", owners: ["Person B"], description: "Arrival day", showHost: false },
+  { date: "2026-12-31", shortDate: "31", weekday: "THU", owners: ["William", "Paula"], description: "New Year's Eve", showHost: true },
+  { date: "2027-01-01", shortDate: "01", weekday: "FRI", owners: ["Stella + Franco Richters"], description: "New Year's Day", showHost: true },
+  { date: "2027-01-02", shortDate: "02", weekday: "SAT", owners: ["Kilian", "Jordana"], description: "Mom's / Nonna's / Mom in law's birthday!", showHost: true },
+  { date: "2027-01-03", shortDate: "03", weekday: "SUN", owners: ["Person F"], description: "Departure day", showHost: false },
 ];
 
 export const events = [
@@ -62,23 +61,17 @@ export const staticPlaces = [
 export const arrivals = [
   {
     id: 1,
-    date: "2026-12-29",
-    time: "14:20",
-    people: "Person A + Person B",
-    detail: "Arrive in Rome",
+    date: "2026-12-30",
+    time: "15:00",
+    people: "Kirsten, Patrik, Kilian, Jordana, William and Paula",
+    detail: "Check in at Horti 14 Borgo Trastevere",
   },
+
   {
     id: 2,
-    date: "2026-12-29",
-    time: "17:10",
-    people: "Person C + Partner",
-    detail: "Arrive in Rome",
-  },
-  {
-    id: 3,
-    date: "2026-12-30",
-    time: "11:00",
-    people: "Person D + family",
-    detail: "Arrive in Rome",
+    date: "2027-01-03",
+    time: "17:20",
+    people: "Franco Richters",
+    detail: "Flight from Rome airport",
   },
 ];

@@ -116,7 +116,7 @@ button {
 
 .event-card {
   display: grid;
-  grid-template-columns: 80px 30px 1fr;
+  grid-template-columns: 80px 30px 1fr auto;
   width: 100%;
   padding: 25px 5px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -244,13 +244,25 @@ button {
 }
 
 .delete-button {
-  margin-top: 12px;
-  padding: 7px 12px;
-  border: 0;
+  align-self: center;
+
+  margin-left: 20px;
+  padding: 8px 13px;
+
+  border: 1px solid rgba(150, 60, 50, 0.25);
   border-radius: 999px;
-  background: rgba(150, 60, 50, 0.1);
+
+  background: transparent;
   color: #963c32;
+
+  font-size: 11px;
+  font-weight: 700;
+
   cursor: pointer;
+}
+
+.delete-button:hover {
+  background: rgba(150, 60, 50, 0.08);
 }
 
 .event-form {
@@ -475,4 +487,10 @@ button {
   margin-top: 4px !important;
   font-size: 12px !important;
   opacity: 0.4 !important;
+}
+
+.overview-description {
+  font-family: Georgia, serif;
+  font-size: 18px;
+  color: #24211d;
 }

@@ -32,6 +32,7 @@ function App() {
     startTime: "",
     locationName: "",
     address: "",
+    websiteUrl: "",
     latitude: "",
     longitude: "",
   });
@@ -66,6 +67,7 @@ async function handleAddEvent(event) {
     start_time: form.startTime,
     location_name: form.locationName,
     address: form.address,
+    website_url: form.websiteUrl || null,
     latitude: Number(form.latitude),
     longitude: Number(form.longitude),
   };
@@ -89,6 +91,7 @@ async function handleAddEvent(event) {
     startTime: data.start_time,
     locationName: data.location_name,
     address: data.address,
+    websiteUrl: data.website_url,
     latitude: data.latitude,
     longitude: data.longitude,
   };
@@ -100,6 +103,8 @@ async function handleAddEvent(event) {
     category: "activity",
     startTime: "",
     locationName: "",
+    address: "",
+    websiteUrl: "",
     latitude: "",
     longitude: "",
   });
@@ -143,6 +148,7 @@ useEffect(() => {
         category: event.category,
         locationName: event.location_name,
         address: event.address,
+        websiteUrl: event.website_url,
         latitude: event.latitude,
         longitude: event.longitude,
       }));
@@ -195,14 +201,14 @@ function openDay(date) {
         <h1>ROMA</h1>
 
         <p className="trip-dates">
-          29 DECEMBER 2026 — 3 JANUARY 2027
+          30 DECEMBER 2026 — 3 JANUARY 2027
         </p>
       </header>
       {viewMode === "overview" ? (
   <main className="overview">
     <div className="overview-heading">
       <p className="eyebrow">THE STAY AT A GLANCE</p>
-      <h2>29 December — 3 January</h2>
+      <h2>30 December — 3 January</h2>
     </div>
 
     <div className="overview-days">
@@ -227,11 +233,16 @@ function openDay(date) {
             </div>
 
             <div className="overview-day-content">
+            <div className="overview-description">
+              {day.description}
+            </div>
+
+            {day.showHost !== false && (
               <div className="overview-owner">
                 Hosted by{" "}
                 <strong>{day.owners.join(" & ")}</strong>
               </div>
-
+            )}
               {arrivalsForDay.map((arrival) => (
                 <div
                   key={arrival.id}
@@ -281,6 +292,7 @@ function openDay(date) {
             onClick={() => {
               setSelectedDate(day.date);
               setSelectedEvent(null);
+              setManageMode(false);
             }}
           >
             <span>{day.weekday}</span>
@@ -352,7 +364,20 @@ function openDay(date) {
               </p>
             )}
 
-            {manageMode && (
+            {event.websiteUrl && (
+              <a
+                className="event-link"
+                href={event.websiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(clickEvent) => clickEvent.stopPropagation()}
+              >
+                Visit website ↗
+              </a>
+            )}   
+
+          </div>
+                      {manageMode && (
               <button
                 className="delete-button"
                 onClick={(clickEvent) => {
@@ -360,10 +385,9 @@ function openDay(date) {
                   handleDeleteEvent(event.id);
                 }}
               >
-                Delete
+                Delete this activity
               </button>
             )}
-          </div>
 
         </div>
       ))}
@@ -456,6 +480,18 @@ function openDay(date) {
         }}
       />
     </label>
+
+    <label>
+  Website <span className="optional">(optional)</span>
+
+  <input
+    type="url"
+    name="websiteUrl"
+    value={form.websiteUrl}
+    onChange={handleFormChange}
+    placeholder="https://..."
+  />
+</label>
 
     {form.latitude && form.longitude && (
   <div className="place-confirmation">
