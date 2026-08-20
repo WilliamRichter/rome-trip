@@ -249,8 +249,12 @@ function App() {
                     What is certain, however, is that from 30 December 2026 to 3
                     January 2027, the city of Rome will find itself confronted
                     with a previously unseen combination of individuals. Let's
-                    call them Dieden Franco Richter & friends for now. And you,
-                    being a member of this group, are DEARLY invited.
+                    call them{" "}
+                    <span className="group-name">
+                      Dieden Franco Richter & Friends
+                    </span>{" "}
+                    for now. And you, being a member of this group, are DEARLY
+                    invited.
                   </p>
 
                   <p className="postcard-stats">

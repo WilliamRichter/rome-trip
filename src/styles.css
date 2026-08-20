@@ -1342,3 +1342,39 @@ button {
 .postcard.flipped {
   height: 1060px;
 }
+
+.group-name {
+  display: inline;
+
+  font: inherit;
+  font-weight: 700;
+
+  background: linear-gradient(
+    90deg,
+    #4a0f0f,
+    #721c18,
+    #a52a24,
+    #d14a3d,
+    #7b1717,
+    #4a0f0f
+  );
+
+  background-size: 200% auto;
+
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+
+filter: drop-shadow(0 1px 1px rgba(74, 15, 15, 0.25));
+
+  animation: red-shimmer 3s linear infinite;
+}
+
+@keyframes red-shimmer {
+  to {
+    background-position: 200% center;
+  }
+}
+
