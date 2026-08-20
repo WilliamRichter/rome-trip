@@ -35,7 +35,6 @@ button {
   opacity: 1;
 }
 
-
 /* =========================================================
    OVERVIEW
    ========================================================= */
@@ -164,7 +163,6 @@ button {
   opacity: 0.35;
 }
 
-
 /* =========================================================
    POSTCARD INTRO
    ========================================================= */
@@ -182,7 +180,6 @@ button {
 
   opacity: 0.75;
 }
-
 
 /* =========================================================
    POSTCARD CONTAINER
@@ -207,14 +204,12 @@ button {
 
   transform-style: preserve-3d;
 
-  transition:
-    transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .postcard.flipped .postcard-inner {
   transform: rotateY(180deg);
 }
-
 
 /* =========================================================
    POSTCARD — BOTH SIDES
@@ -240,7 +235,6 @@ button {
     0 2px 5px rgba(0, 0, 0, 0.08);
 }
 
-
 /* Gold New Year's Eve corner details */
 
 .postcard-front::before,
@@ -257,38 +251,38 @@ button {
 
   background:
     linear-gradient(
-      135deg,
-      #c9a227 0 5px,
-      transparent 5px 11px,
-      #c9a227 11px 15px,
-      transparent 15px
-    ) top left / 65px 65px no-repeat,
-
+        135deg,
+        #c9a227 0 5px,
+        transparent 5px 11px,
+        #c9a227 11px 15px,
+        transparent 15px
+      )
+      top left / 65px 65px no-repeat,
     linear-gradient(
-      225deg,
-      #c9a227 0 5px,
-      transparent 5px 11px,
-      #c9a227 11px 15px,
-      transparent 15px
-    ) top right / 65px 65px no-repeat,
-
+        225deg,
+        #c9a227 0 5px,
+        transparent 5px 11px,
+        #c9a227 11px 15px,
+        transparent 15px
+      )
+      top right / 65px 65px no-repeat,
     linear-gradient(
-      45deg,
-      #c9a227 0 5px,
-      transparent 5px 11px,
-      #c9a227 11px 15px,
-      transparent 15px
-    ) bottom left / 65px 65px no-repeat,
-
+        45deg,
+        #c9a227 0 5px,
+        transparent 5px 11px,
+        #c9a227 11px 15px,
+        transparent 15px
+      )
+      bottom left / 65px 65px no-repeat,
     linear-gradient(
-      315deg,
-      #c9a227 0 5px,
-      transparent 5px 11px,
-      #c9a227 11px 15px,
-      transparent 15px
-    ) bottom right / 65px 65px no-repeat;
+        315deg,
+        #c9a227 0 5px,
+        transparent 5px 11px,
+        #c9a227 11px 15px,
+        transparent 15px
+      )
+      bottom right / 65px 65px no-repeat;
 }
-
 
 /* =========================================================
    POSTCARD FRONT
@@ -314,12 +308,11 @@ button {
 
   inset: 0;
 
-  background:
-    linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.45),
-      rgba(0, 0, 0, 0.05) 60%
-    );
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.45),
+    rgba(0, 0, 0, 0.05) 60%
+  );
 }
 
 .postcard-front-title {
@@ -332,9 +325,7 @@ button {
 
   width: 90%;
 
-  transform:
-    translateX(-50%)
-    rotate(-2deg);
+  transform: translateX(-50%) rotate(-2deg);
 
   color: #fff1c7;
 
@@ -377,7 +368,6 @@ button {
   visibility: hidden;
 }
 
-
 /* =========================================================
    POSTCARD BACK
    ========================================================= */
@@ -387,10 +377,7 @@ button {
 
   grid-template-columns: 1.55fr 0.85fr;
 
-  padding:
-    40px
-    40px
-    82px;
+  padding: 40px 40px 82px;
 
   background: #f5eedc;
   color: #24211d;
@@ -398,14 +385,12 @@ button {
   transform: rotateY(180deg);
 }
 
-
 /* Message */
 
 .postcard-message {
   padding-right: 36px;
 
-  border-right:
-    1px solid rgba(36, 33, 29, 0.18);
+  border-right: 1px solid rgba(36, 33, 29, 0.18);
 }
 
 .postcard-message p {
@@ -447,7 +432,6 @@ button {
   letter-spacing: 0.12em;
 }
 
-
 /* =========================================================
    POSTCARD RIGHT SIDE
    ========================================================= */
@@ -461,7 +445,6 @@ button {
   padding-left: 28px;
 }
 
-
 /* ROMA STAMP */
 
 .postcard-stamp {
@@ -473,8 +456,7 @@ button {
 
   transform: rotate(3deg);
 
-  filter:
-    drop-shadow(0 2px 2px rgba(0, 0, 0, 0.12));
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.12));
 }
 
 .postcard-stamp img {
@@ -483,7 +465,6 @@ button {
   width: 100%;
   height: auto;
 }
-
 
 /* INVITATION BLOCK */
 
@@ -500,7 +481,6 @@ button {
 
   text-align: center;
 }
-
 
 /* THIS INVITATION IS / EXTENDED TO */
 
@@ -521,7 +501,6 @@ button {
   line-height: 1.4;
 }
 
-
 /* GOLD CURSIVE */
 
 .invite-recipient {
@@ -529,10 +508,7 @@ button {
 
   color: #c5962d;
 
-  font-family:
-    "Snell Roundhand",
-    "Apple Chancery",
-    cursive;
+  font-family: "Snell Roundhand", "Apple Chancery", cursive;
 
   font-size: 18px;
   font-weight: 400;
@@ -540,7 +516,6 @@ button {
 
   line-height: 1.25;
 }
-
 
 /* GOLD ORNAMENT LINE */
 
@@ -594,7 +569,6 @@ button {
   transform: translateY(-1px);
 }
 
-
 /* ROME + DATES */
 
 .invite-destination {
@@ -622,7 +596,6 @@ button {
 
   opacity: 0.9;
 }
-
 
 /* =========================================================
    POSTCARD COUNTDOWN
@@ -685,7 +658,6 @@ button {
   opacity: 1;
 }
 
-
 /* =========================================================
    DETAIL NAVIGATION
    ========================================================= */
@@ -730,7 +702,6 @@ button {
 
   transform: translateX(-2px);
 }
-
 
 /* =========================================================
    DAY NAVIGATION
@@ -780,7 +751,6 @@ button {
 .day-button.active {
   border-bottom-color: #963c32;
 }
-
 
 /* =========================================================
    DAY CONTENT / ITINERARY
@@ -930,7 +900,6 @@ button {
   opacity: 0.4;
 }
 
-
 /* =========================================================
    MAP
    ========================================================= */
@@ -945,7 +914,6 @@ button {
 
   min-height: 650px;
 }
-
 
 /* Static accommodation markers */
 
@@ -974,10 +942,8 @@ button {
   font-size: 16px;
   font-weight: bold;
 
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
-
 
 /* =========================================================
    MANAGE MODE
@@ -1019,7 +985,6 @@ button {
 .delete-button:hover {
   background: rgba(150, 60, 50, 0.08);
 }
-
 
 /* =========================================================
    EVENT FORM
@@ -1099,20 +1064,15 @@ button {
   opacity: 0.65;
 }
 
-
 /* =========================================================
    MOBILE
    ========================================================= */
 
 @media (max-width: 650px) {
-
   /* Overview */
 
   .overview {
-    padding:
-      35px
-      4vw
-      60px;
+    padding: 35px 4vw 60px;
   }
 
   .overview-heading h2 {
@@ -1128,18 +1088,17 @@ button {
     padding: 20px 16px;
   }
 
-
   /* Postcard */
 
   .postcard {
-  height: 240px;
+    height: 240px;
 
-  transition: height 0.6s ease;
-}
+    transition: height 0.6s ease;
+  }
 
-.postcard.flipped {
-  height: 1060px;
-}
+  .postcard.flipped {
+    height: 1060px;
+  }
 
   .postcard-front-title {
     top: 20px;
@@ -1153,10 +1112,7 @@ button {
     display: flex;
     flex-direction: column;
 
-    padding:
-      28px
-      24px
-      34px;
+    padding: 28px 24px 34px;
   }
 
   .postcard-message {
@@ -1165,8 +1121,7 @@ button {
 
     border-right: 0;
 
-    border-bottom:
-      1px solid rgba(36, 33, 29, 0.18);
+    border-bottom: 1px solid rgba(36, 33, 29, 0.18);
   }
 
   .postcard-message p {
@@ -1177,10 +1132,7 @@ button {
   .postcard-address {
     position: relative;
 
-    padding:
-      32px
-      0
-      0;
+    padding: 32px 0 0;
 
     text-align: center;
   }
@@ -1194,10 +1146,7 @@ button {
     width: 125px;
     height: auto;
 
-    margin:
-      0
-      auto
-      28px;
+    margin: 0 auto 28px;
 
     transform: rotate(3deg);
   }
@@ -1235,9 +1184,7 @@ button {
   .invite-divider {
     width: 75%;
 
-    margin:
-      22px
-      auto;
+    margin: 22px auto;
   }
 
   .invite-destination {
@@ -1279,7 +1226,6 @@ button {
     padding-right: 12px;
   }
 
-
   /* Day content */
 
   .content {
@@ -1316,7 +1262,6 @@ button {
     margin-left: 0;
   }
 
-
   /* Map */
 
   .map-panel,
@@ -1327,19 +1272,17 @@ button {
   }
 
   .postcard-hint {
-  right: 12px;
-  bottom: 10px;
+    right: 12px;
+    bottom: 10px;
 
-  padding: 5px 8px;
+    padding: 5px 8px;
 
-  font-size: 8px;
-  font-weight: 700;
+    font-size: 8px;
+    font-weight: 700;
 
-  opacity: 0.85;
+    opacity: 0.85;
+  }
 }
-}
-
-
 
 .group-name {
   display: inline;
@@ -1365,7 +1308,7 @@ button {
   color: transparent;
   -webkit-text-fill-color: transparent;
 
-filter: drop-shadow(0 1px 1px rgba(74, 15, 15, 0.25));
+  filter: drop-shadow(0 1px 1px rgba(74, 15, 15, 0.25));
 
   animation: red-shimmer 3s linear infinite;
 }
@@ -1375,4 +1318,3 @@ filter: drop-shadow(0 1px 1px rgba(74, 15, 15, 0.25));
     background-position: 200% center;
   }
 }
-
