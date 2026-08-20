@@ -1132,7 +1132,7 @@ button {
   /* Postcard */
 
   .postcard {
-    height: 720px;
+    height: 980px;
   }
 
   .postcard-front-title {
@@ -1144,17 +1144,18 @@ button {
   }
 
   .postcard-back {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
 
     padding:
       28px
-      26px
-      86px;
+      24px
+      34px;
   }
 
   .postcard-message {
     padding-right: 0;
-    padding-bottom: 20px;
+    padding-bottom: 28px;
 
     border-right: 0;
 
@@ -1168,21 +1169,77 @@ button {
   }
 
   .postcard-address {
-    padding-top: 22px;
-    padding-left: 0;
+    position: relative;
+
+    padding:
+      32px
+      0
+      0;
+
+    text-align: center;
   }
 
   .postcard-stamp {
-    width: 58px;
-    height: 70px;
+    position: relative;
 
-    font-size: 11px;
+    top: auto;
+    right: auto;
+
+    width: 125px;
+    height: auto;
+
+    margin:
+      0
+      auto
+      28px;
+
+    transform: rotate(3deg);
+  }
+
+  .postcard-stamp img {
+    width: 100%;
+    height: auto;
+  }
+
+  .invite-block {
+    height: auto;
+
+    padding-top: 0;
+
+    align-items: center;
+  }
+
+  .invite-intro {
+    margin-bottom: 20px;
+
+    text-align: center;
   }
 
   .invite-recipient {
-    max-width: 75%;
+    max-width: 280px;
 
-    font-size: 13px;
+    margin-left: auto;
+    margin-right: auto;
+
+    font-size: 17px;
+
+    text-align: center;
+  }
+
+  .invite-divider {
+    width: 75%;
+
+    margin:
+      22px
+      auto;
+  }
+
+  .invite-destination {
+    align-items: center;
+
+    padding-bottom: 10px;
+
+    text-align: center;
   }
 
   .countdown-label {
@@ -1190,6 +1247,8 @@ button {
   }
 
   .countdown-numbers {
+    justify-content: center;
+
     gap: 10px;
   }
 
@@ -1200,7 +1259,6 @@ button {
   .countdown-numbers span {
     font-size: 7px;
   }
-
 
   /* Day navigation */
 
@@ -1261,4 +1319,26 @@ button {
 
     min-height: 430px;
   }
+
+  .postcard-hint {
+  right: 12px;
+  bottom: 10px;
+
+  padding: 5px 8px;
+
+  font-size: 8px;
+  font-weight: 700;
+
+  opacity: 0.85;
+}
+}
+
+.postcard {
+  height: 240px;
+
+  transition: height 0.6s ease;
+}
+
+.postcard.flipped {
+  height: 1060px;
 }
