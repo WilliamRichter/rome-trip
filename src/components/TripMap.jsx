@@ -18,12 +18,7 @@ const apartmentIcon = L.divIcon({
   popupAnchor: [0, -20],
 });
 
-function TripMap({
-  events,
-  staticPlaces,
-  selectedEvent,
-  onSelectEvent,
-}) {
+function TripMap({ events, staticPlaces, selectedEvent, onSelectEvent }) {
   const mapContainer = useRef(null);
   const mapInstance = useRef(null);
   const eventLayer = useRef(null);
@@ -35,31 +30,20 @@ function TripMap({
 
     mapInstance.current = L.map(mapContainer.current).setView(
       [41.9028, 12.4964],
-      13
+      13,
     );
 
-    L.tileLayer(
-      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      {
-        attribution: "&copy; OpenStreetMap contributors",
-      }
-    ).addTo(mapInstance.current);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors",
+    }).addTo(mapInstance.current);
 
-    eventLayer.current = L.layerGroup().addTo(
-      mapInstance.current
-    );
+    eventLayer.current = L.layerGroup().addTo(mapInstance.current);
 
-    staticLayer.current = L.layerGroup().addTo(
-      mapInstance.current
-    );
+    staticLayer.current = L.layerGroup().addTo(mapInstance.current);
   }, []);
 
   useEffect(() => {
-    if (
-      !mapInstance.current ||
-      !eventLayer.current ||
-      !staticLayer.current
-    ) {
+    if (!mapInstance.current || !eventLayer.current || !staticLayer.current) {
       return;
     }
 
@@ -71,10 +55,7 @@ function TripMap({
 
     // Day-specific itinerary events
     events.forEach((event) => {
-      const marker = L.marker([
-        event.latitude,
-        event.longitude,
-      ]);
+      const marker = L.marker([event.latitude, event.longitude]);
 
       marker.bindPopup(`
         <strong>${event.name}</strong><br />
@@ -90,36 +71,23 @@ function TripMap({
 
       markers.current[event.id] = marker;
 
-      bounds.push([
-        event.latitude,
-        event.longitude,
-      ]);
+      bounds.push([event.latitude, event.longitude]);
     });
 
     // Static places such as accommodation
     staticPlaces.forEach((place) => {
-      const icon =
-        place.type === "hotel"
-          ? hotelIcon
-          : apartmentIcon;
+      const icon = place.type === "hotel" ? hotelIcon : apartmentIcon;
 
-      const marker = L.marker(
-        [place.latitude, place.longitude],
-        { icon }
-      );
+      const marker = L.marker([place.latitude, place.longitude], { icon });
 
       marker.bindPopup(`
         <strong>${place.name}</strong><br />
-        ${place.type}<br />
-        ${place.description}
+        ${place.address}<br />
       `);
 
       marker.addTo(staticLayer.current);
 
-      bounds.push([
-        place.latitude,
-        place.longitude,
-      ]);
+      bounds.push([place.latitude, place.longitude]);
     });
 
     if (bounds.length === 1) {

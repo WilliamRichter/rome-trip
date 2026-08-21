@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "./lib/supabaseClient";
 import { tripDays, staticPlaces, arrivals } from "./data/tripData";
 import { SearchBox } from "@mapbox/search-js-react";
@@ -41,9 +41,11 @@ function App() {
   });
   const selectedDay = tripDays.find((day) => day.date === selectedDate);
 
-  const dayEvents = allEvents
-    .filter((event) => event.date === selectedDate)
-    .sort((a, b) => a.startTime.localeCompare(b.startTime));
+  const dayEvents = useMemo(() => {
+    return allEvents
+      .filter((event) => event.date === selectedDate)
+      .sort((a, b) => a.startTime.localeCompare(b.startTime));
+  }, [allEvents, selectedDate]);
 
   function handleFormChange(event) {
     const { name, value } = event.target;
@@ -262,12 +264,9 @@ function App() {
                   </p>
 
                   <p>
-                    Sounds like a lot? Well, in order to prepare, I suggest you
-                    get comfortable with this website and, in pure Dieden
-                    Richter fashion, plan your specific day{" "}
-                    <strong>TO THE MINUTE</strong> — avoiding unnecessary
-                    migraines and small talk and last-minute lunch reservations
-                    at restaurants with pictures of the food on their menu.
+                    Sounds like a lot? Fret not! Play around a bit with this
+                    website, and I'm sure we'll all look back on this trip
+                    fondly. And if not, well, at least we can say we tried.
                   </p>
 
                   <p className="postcard-remember">

@@ -1,9 +1,44 @@
 export const tripDays = [
-  { date: "2026-12-30", shortDate: "30", weekday: "WED", owners: ["Person B"], description: "Arrival day", showHost: false },
-  { date: "2026-12-31", shortDate: "31", weekday: "THU", owners: ["William", "Paula"], description: "New Year's Eve", showHost: true },
-  { date: "2027-01-01", shortDate: "01", weekday: "FRI", owners: ["Stella + Franco Richters"], description: "New Year's Day", showHost: true },
-  { date: "2027-01-02", shortDate: "02", weekday: "SAT", owners: ["Kilian", "Jordana"], description: "Mom's / Nonna's / Mom in law's birthday!", showHost: true },
-  { date: "2027-01-03", shortDate: "03", weekday: "SUN", owners: ["Person F"], description: "Departure day", showHost: false },
+  {
+    date: "2026-12-30",
+    shortDate: "30",
+    weekday: "WED",
+    owners: ["Person B"],
+    description: "Arrival day",
+    showHost: false,
+  },
+  {
+    date: "2026-12-31",
+    shortDate: "31",
+    weekday: "THU",
+    owners: ["William", "Paula"],
+    description: "New Year's Eve",
+    showHost: true,
+  },
+  {
+    date: "2027-01-01",
+    shortDate: "01",
+    weekday: "FRI",
+    owners: ["Stella + Franco Richters"],
+    description: "New Year's Day",
+    showHost: true,
+  },
+  {
+    date: "2027-01-02",
+    shortDate: "02",
+    weekday: "SAT",
+    owners: ["Kilian", "Jordana"],
+    description: "Mom's / Nonna's / Mom in law's birthday!",
+    showHost: true,
+  },
+  {
+    date: "2027-01-03",
+    shortDate: "03",
+    weekday: "SUN",
+    owners: ["Person F"],
+    description: "Departure day",
+    showHost: false,
+  },
 ];
 
 export const events = [
@@ -42,11 +77,12 @@ export const events = [
 export const staticPlaces = [
   {
     id: "hotel",
-    name: "Family Hotel",
+    name: "Family hotel - Hotel Horti 14",
     type: "hotel",
     latitude: 41.89439362872292,
     longitude: 12.463107454999244,
-    description: "Main family hotel",
+    address: "Via di San Francesco di Sales 14, Rome",
+    description: "Hotel Horti 14",
   },
   {
     id: "apartment",
@@ -54,6 +90,7 @@ export const staticPlaces = [
     type: "apartment",
     latitude: 41.89669103691434,
     longitude: 12.464601485684447,
+    address: "Via della Lungara 40, Rome",
     description: "Apartment for sister and family",
   },
 ];
