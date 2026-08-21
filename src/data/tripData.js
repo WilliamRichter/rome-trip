@@ -4,7 +4,7 @@ export const tripDays = [
     shortDate: "30",
     weekday: "WED",
     owners: ["Person B"],
-    description: "Arrival day",
+    description: "Arrival day - getting ready and settling in",
     showHost: false,
   },
   {
@@ -28,7 +28,8 @@ export const tripDays = [
     shortDate: "02",
     weekday: "SAT",
     owners: ["Kilian", "Jordana"],
-    description: "Mom's / Nonna's / Mom in law's birthday!",
+    description:
+      "Mom, Nonna, mother-in-law, and most importantly - BIRTHDAY GIRL",
     showHost: true,
   },
   {

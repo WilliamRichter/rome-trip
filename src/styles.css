@@ -797,6 +797,28 @@ button {
   opacity: 0.55;
 }
 
+.event-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  margin-top: 10px;
+}
+
+/* Two links: start from the left */
+.event-actions.has-website {
+  justify-content: flex-start;
+}
+
+/* Only Maps: center it */
+.event-actions.maps-only {
+  justify-content: center;
+}
+
+.event-actions .event-link {
+  margin-top: 0;
+}
+
 .events {
   width: 100%;
 }

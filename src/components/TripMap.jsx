@@ -57,11 +57,46 @@ function TripMap({ events, staticPlaces, selectedEvent, onSelectEvent }) {
     events.forEach((event) => {
       const marker = L.marker([event.latitude, event.longitude]);
 
+      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+        `${event.locationName} ${event.address || ""}`,
+      )}`;
+
+      const websiteLink = event.websiteUrl
+        ? `
+      <a
+        href="${event.websiteUrl}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Website ↗
+      </a>
+    `
+        : "";
+
       marker.bindPopup(`
-        <strong>${event.name}</strong><br />
-        ${event.startTime}<br />
-        ${event.locationName}
-      `);
+  <div class="map-popup">
+    <strong>${event.name}</strong><br />
+    ${event.startTime}<br />
+    ${event.locationName}
+    ${
+      event.address
+        ? `<br /><span class="map-popup-address">${event.address}</span>`
+        : ""
+    }
+
+    <div class="map-popup-actions">
+      <a
+        href="${mapsUrl}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Open in Maps ↗
+      </a>
+
+      ${websiteLink}
+    </div>
+  </div>
+`);
 
       marker.on("click", () => {
         onSelectEvent(event.id);

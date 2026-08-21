@@ -471,17 +471,37 @@ function App() {
                         <p className="event-address">{event.address}</p>
                       )}
 
-                      {event.websiteUrl && (
+                      <div
+                        className={`event-actions ${
+                          event.websiteUrl ? "has-website" : "maps-only"
+                        }`}
+                      >
                         <a
                           className="event-link"
-                          href={event.websiteUrl}
+                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                            `${event.locationName} ${event.address || ""}`,
+                          )}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(clickEvent) => clickEvent.stopPropagation()}
                         >
-                          Visit website ↗
+                          Open in Maps ↗
                         </a>
-                      )}
+
+                        {event.websiteUrl && (
+                          <a
+                            className="event-link"
+                            href={event.websiteUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(clickEvent) =>
+                              clickEvent.stopPropagation()
+                            }
+                          >
+                            Website ↗
+                          </a>
+                        )}
+                      </div>
                     </div>
                     {manageMode && (
                       <button
