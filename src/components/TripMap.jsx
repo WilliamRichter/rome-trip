@@ -115,10 +115,33 @@ function TripMap({ events, staticPlaces, selectedEvent, onSelectEvent }) {
 
       const marker = L.marker([place.latitude, place.longitude], { icon });
 
+      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+        `${place.name} ${place.address || ""}`,
+      )}`;
+
       marker.bindPopup(`
-        <strong>${place.name}</strong><br />
-        ${place.address}<br />
-      `);
+  <div class="map-popup">
+    <strong>${place.name}</strong>
+
+    ${
+      place.address
+        ? `<br /><span class="map-popup-address">${place.address}</span>`
+        : ""
+    }
+
+
+
+    <div class="map-popup-actions">
+      <a
+        href="${mapsUrl}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Open in Maps ↗
+      </a>
+    </div>
+  </div>
+`);
 
       marker.addTo(staticLayer.current);
 

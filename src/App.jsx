@@ -266,7 +266,7 @@ function App() {
                   <p>
                     Sounds like a lot? Fret not! Play around a bit with this
                     website, and I'm sure we'll all look back on this trip
-                    fondly. And if not, well, at least we can say we tried.
+                    fondly. And if not we at least can say we tried.
                   </p>
 
                   <p className="postcard-remember">
