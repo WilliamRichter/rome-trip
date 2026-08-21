@@ -163,6 +163,64 @@ button {
   opacity: 0.35;
 }
 
+.overview-item {
+  display: grid;
+  grid-template-columns: 52px 20px 1fr;
+  align-items: start;
+
+  gap: 10px;
+
+  padding: 10px 0;
+
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.overview-time {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.overview-item-content {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.overview-item-content strong {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.overview-item-content span {
+  font-size: 12px;
+  opacity: 0.55;
+}
+
+.overview-event-symbol {
+  color: #963c32;
+  font-size: 12px;
+}
+
+.overview-logistics {
+  opacity: 0.72;
+}
+
+.overview-logistics .overview-item-content {
+  grid-column: 2 / 4;
+}
+
+.overview-activity {
+  opacity: 1;
+}
+
+.overview-empty {
+  padding-top: 8px;
+
+  font-size: 12px;
+  opacity: 0.4;
+}
+
 /* =========================================================
    POSTCARD INTRO
    ========================================================= */
@@ -1304,6 +1362,10 @@ button {
 
     opacity: 0.85;
   }
+
+  .overview-map {
+    height: 340px;
+  }
 }
 
 .group-name {
@@ -1339,4 +1401,100 @@ button {
   to {
     background-position: 200% center;
   }
+}
+/* =========================================================
+   OVERVIEW MAP
+   ========================================================= */
+
+.overview-map-section {
+  margin-bottom: 60px;
+}
+
+.overview-map-heading {
+  margin-bottom: 20px;
+}
+
+.overview-map-heading h2 {
+  margin: 5px 0 0;
+
+  color: #24211d;
+
+  font-family: Georgia, serif;
+  font-size: 32px;
+  font-weight: 400;
+}
+
+.overview-map {
+  height: 440px;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(36, 33, 29, 0.12);
+  border-radius: 20px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.overview-map .map {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.overview-map-tooltip {
+  text-align: center;
+}
+
+.overview-map-tooltip strong {
+  font-family: Georgia, serif;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.overview-map-tooltip span {
+  font-size: 11px;
+  opacity: 0.65;
+}
+
+.overview-map-popup {
+  min-width: 120px;
+
+  color: #24211d;
+}
+
+.overview-map-popup strong {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #24211d;
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.overview-popup-date {
+  display: block;
+
+  color: #963c32;
+
+  font-size: 9px;
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+}
+
+.overview-popup-static {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #963c32;
+
+  font-size: 9px;
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }

@@ -266,7 +266,7 @@ function App() {
                   <p>
                     Sounds like a lot? Fret not! Play around a bit with this
                     website, and I'm sure we'll all look back on this trip
-                    fondly. And if not we at least can say we tried.
+                    fondly.
                   </p>
 
                   <p className="postcard-remember">
@@ -335,6 +335,21 @@ function App() {
               </div>
             </div>
           </div>
+          <section className="overview-map-section">
+            <div className="overview-map-heading">
+              <p className="eyebrow">OUR ROME</p>
+              <h2>Places we'll be visiting</h2>
+            </div>
+
+            <div className="overview-map">
+              <TripMap
+                events={allEvents}
+                staticPlaces={staticPlaces}
+                selectedEvent={null}
+                overviewMode={true}
+              />
+            </div>
+          </section>
           <div className="overview-heading">
             <p className="eyebrow">THE STAY AT A GLANCE</p>
             <h2>30 December — 3 January</h2>
@@ -371,20 +386,47 @@ function App() {
                         Hosted by <strong>{day.owners.join(" & ")}</strong>
                       </div>
                     )}
+
+                    {/* Logistics: arrivals / departures / good-to-know */}
                     {arrivalsForDay.map((arrival) => (
-                      <div key={arrival.id} className="overview-arrival">
+                      <div
+                        key={arrival.id}
+                        className="overview-item overview-logistics"
+                      >
                         <span className="overview-time">{arrival.time}</span>
 
-                        <div>
+                        <div className="overview-item-content">
                           <strong>{arrival.people}</strong>
-                          <div>{arrival.detail}</div>
+                          <span>{arrival.detail}</span>
                         </div>
                       </div>
                     ))}
 
-                    <div className="overview-event-count">
-                      {eventsForDay.length} activities planned
-                    </div>
+                    {/* Planned activities from Supabase */}
+                    {eventsForDay.map((event) => (
+                      <div
+                        key={event.id}
+                        className="overview-item overview-activity"
+                      >
+                        <span className="overview-time">{event.startTime}</span>
+
+                        <span className="overview-event-symbol">
+                          {categorySymbols[event.category] || "○"}
+                        </span>
+
+                        <div className="overview-item-content">
+                          <strong>{event.name}</strong>
+                          <span>{event.locationName}</span>
+                        </div>
+                      </div>
+                    ))}
+
+                    {arrivalsForDay.length === 0 &&
+                      eventsForDay.length === 0 && (
+                        <div className="overview-empty">
+                          Nothing planned yet.
+                        </div>
+                      )}
                   </div>
 
                   <div className="overview-arrow">→</div>

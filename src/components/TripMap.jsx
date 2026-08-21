@@ -18,7 +18,13 @@ const apartmentIcon = L.divIcon({
   popupAnchor: [0, -20],
 });
 
-function TripMap({ events, staticPlaces, selectedEvent, onSelectEvent }) {
+function TripMap({
+  events,
+  staticPlaces,
+  selectedEvent,
+  onSelectEvent = null,
+  overviewMode = false,
+}) {
   const mapContainer = useRef(null);
   const mapInstance = useRef(null);
   const eventLayer = useRef(null);
@@ -57,6 +63,17 @@ function TripMap({ events, staticPlaces, selectedEvent, onSelectEvent }) {
     events.forEach((event) => {
       const marker = L.marker([event.latitude, event.longitude]);
 
+      // Create readable date for this event
+      const eventDate = new Date(`${event.date}T12:00:00`);
+
+      const dayLabel = eventDate
+        .toLocaleDateString("en-GB", {
+          weekday: "short",
+          day: "numeric",
+          month: "short",
+        })
+        .toUpperCase();
+
       const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
         `${event.locationName} ${event.address || ""}`,
       )}`;
@@ -73,34 +90,55 @@ function TripMap({ events, staticPlaces, selectedEvent, onSelectEvent }) {
     `
         : "";
 
-      marker.bindPopup(`
-  <div class="map-popup">
-    <strong>${event.name}</strong><br />
-    ${event.startTime}<br />
-    ${event.locationName}
-    ${
-      event.address
-        ? `<br /><span class="map-popup-address">${event.address}</span>`
-        : ""
-    }
+      // OVERVIEW MAP
+      if (overviewMode) {
+        marker.bindPopup(`
+<div class="overview-map-popup">
+  <strong>${event.locationName}</strong>
 
-    <div class="map-popup-actions">
-      <a
-        href="${mapsUrl}"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Open in Maps ↗
-      </a>
+  <span class="overview-popup-date">
+    ${dayLabel}
+  </span>
+</div>
+    `);
+      }
 
-      ${websiteLink}
-    </div>
-  </div>
-`);
+      // NORMAL DAY MAP
+      else {
+        marker.bindPopup(`
+      <div class="map-popup">
+        <strong>${event.name}</strong><br />
+        ${event.startTime}<br />
+        ${event.locationName}
 
-      marker.on("click", () => {
-        onSelectEvent(event.id);
-      });
+        ${
+          event.address
+            ? `<br /><span class="map-popup-address">
+                ${event.address}
+              </span>`
+            : ""
+        }
+
+        <div class="map-popup-actions">
+          <a
+            href="${mapsUrl}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Open in Maps ↗
+          </a>
+
+          ${websiteLink}
+        </div>
+      </div>
+    `);
+      }
+
+      if (onSelectEvent) {
+        marker.on("click", () => {
+          onSelectEvent(event.id);
+        });
+      }
 
       marker.addTo(eventLayer.current);
 
@@ -119,33 +157,45 @@ function TripMap({ events, staticPlaces, selectedEvent, onSelectEvent }) {
         `${place.name} ${place.address || ""}`,
       )}`;
 
-      marker.bindPopup(`
-  <div class="map-popup">
-    <strong>${place.name}</strong>
+      if (overviewMode) {
+        marker.bindPopup(`
+      <div class="overview-map-popup">
+        <strong>${place.name}</strong>
 
-    ${
-      place.address
-        ? `<br /><span class="map-popup-address">${place.address}</span>`
-        : ""
-    }
+        <span class="overview-popup-static">
+          ${place.type}
+        </span>
+      </div>
+    `);
+      } else {
+        marker.bindPopup(`
+      <div class="map-popup">
+        <strong>${place.name}</strong>
 
+        ${
+          place.address
+            ? `<br /><span class="map-popup-address">
+                ${place.address}
+              </span>`
+            : ""
+        }
 
+        ${place.description ? `<br />${place.description}` : ""}
 
-    <div class="map-popup-actions">
-      <a
-        href="${mapsUrl}"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Open in Maps ↗
-      </a>
-    </div>
-  </div>
-`);
+        <div class="map-popup-actions">
+          <a
+            href="${mapsUrl}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Open in Maps ↗
+          </a>
+        </div>
+      </div>
+    `);
+      }
 
       marker.addTo(staticLayer.current);
-
-      bounds.push([place.latitude, place.longitude]);
     });
 
     if (bounds.length === 1) {

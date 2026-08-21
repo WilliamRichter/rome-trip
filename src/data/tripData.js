@@ -78,12 +78,12 @@ export const events = [
 export const staticPlaces = [
   {
     id: "hotel",
-    name: "Family hotel - Hotel Horti 14",
+    name: "Horti 14",
     type: "hotel",
     latitude: 41.89439362872292,
     longitude: 12.463107454999244,
     address: "Via di San Francesco di Sales 14, Rome",
-    description: "Hotel Horti 14",
+    description: "Hotel",
   },
   {
     id: "apartment",
