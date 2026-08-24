@@ -11,7 +11,16 @@ export const tripDays = [
     date: "2026-12-31",
     shortDate: "31",
     weekday: "THU",
-    owners: ["William", "Paula"],
+    owners: [
+      {
+        name: "William",
+        image: "/images/hosts/william.png",
+      },
+      {
+        name: "Paula",
+        image: "/images/hosts/paula.png",
+      },
+    ],
     description: "New Year's Eve 🍾 🎆",
     showHost: true,
   },
@@ -19,7 +28,30 @@ export const tripDays = [
     date: "2027-01-01",
     shortDate: "01",
     weekday: "FRI",
-    owners: ["Stella + Franco Richters"],
+    owners: [
+      {
+        name: "Stella",
+        image: "/images/hosts/stella.png",
+      },
+      {
+        name: "Alice",
+        image: "/images/hosts/alice.png",
+      },
+      {
+        name: "Matteo",
+        image: "/images/hosts/matteo.png",
+      },
+      {
+        name: "Leonardo",
+        image: "/images/hosts/leonardo.png",
+      },
+      {
+        name: "Gaia",
+        image: "/images/hosts/gaia.png",
+      },
+    ],
+
+    hostLabel: "Stella + the Franco Richters",
     description: "New Year's Day 🌅",
     showHost: true,
   },
@@ -27,7 +59,16 @@ export const tripDays = [
     date: "2027-01-02",
     shortDate: "02",
     weekday: "SAT",
-    owners: ["Kilian", "Jordana"],
+    owners: [
+      {
+        name: "Kilian",
+        image: "/images/hosts/kilian.png",
+      },
+      {
+        name: "Jordana",
+        image: "/images/hosts/jordana.png",
+      },
+    ],
     description: "Mom's / Nonna's / Mother-in-law's birthday! 🎂",
   },
   {

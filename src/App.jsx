@@ -399,7 +399,11 @@ function App() {
 
                     {day.showHost !== false && (
                       <div className="overview-owner">
-                        Hosted by <strong>{day.owners.join(" & ")}</strong>
+                        Hosted by{" "}
+                        <strong>
+                          {day.hostLabel ||
+                            day.owners.map((owner) => owner.name).join(" & ")}
+                        </strong>
                       </div>
                     )}
 
@@ -489,14 +493,42 @@ function App() {
                   <h2>
                     {selectedDay.weekday} {selectedDay.shortDate}
                   </h2>
+                  <p className="day-description">{selectedDay.description}</p>
                 </div>
 
                 {selectedDay.showHost !== false && (
-                  <div className="owner">
-                    Hosted by <strong>{selectedDay.owners.join(" & ")}</strong>
+                  <div className="day-hosts">
+                    <div
+                      className={`host-portraits hosts-${selectedDay.owners.length}`}
+                    >
+                      {selectedDay.owners.map((owner, index) => (
+                        <img
+                          key={owner.name}
+                          src={owner.image}
+                          alt={owner.name}
+                          className={`host-portrait host-${index}`}
+                        />
+                      ))}
+                    </div>
+
+                    <div className="owner">
+                      Hosted by{" "}
+                      <strong>
+                        {selectedDay.hostLabel ||
+                          selectedDay.owners
+                            .map((owner) => owner.name)
+                            .join(" & ")}
+                      </strong>
+                    </div>
                   </div>
                 )}
               </div>
+              <button
+                className="add-activity-button"
+                onClick={() => setAddActivityOpen((current) => !current)}
+              >
+                {addActivityOpen ? "Cancel" : "+ Add activity"}
+              </button>
 
               <div className="events">
                 {dayEvents.length === 0 && (
@@ -623,12 +655,7 @@ function App() {
                   </div>
                 ))}
               </div>
-              <button
-                className="add-activity-button"
-                onClick={() => setAddActivityOpen((current) => !current)}
-              >
-                {addActivityOpen ? "Cancel" : "+ Add activity"}
-              </button>
+
               {addActivityOpen && (
                 <form className="event-form" onSubmit={handleAddEvent}>
                   <h3>{editingEventId ? "Edit activity" : "Add activity"}</h3>

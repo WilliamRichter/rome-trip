@@ -759,17 +759,17 @@ button {
 }
 
 .day-button span {
-  display: block;
-
-  margin-bottom: 4px;
+  display: inline;
+  margin-right: 6px;
 
   font-size: 10px;
   letter-spacing: 0.15em;
-
   opacity: 0.45;
 }
 
 .day-button strong {
+  display: inline;
+
   font-family: Georgia, serif;
   font-size: 30px;
   font-weight: 400;
@@ -777,6 +777,10 @@ button {
 
 .day-button.active {
   border-bottom-color: #963c32;
+}
+
+.day-button {
+  white-space: nowrap;
 }
 
 /* =========================================================
@@ -816,6 +820,8 @@ button {
   font-family: Georgia, serif;
   font-size: 42px;
   font-weight: 400;
+
+  white-space: nowrap;
 }
 
 .owner {
@@ -1404,7 +1410,7 @@ button {
 }
 
 .add-activity-button {
-  margin-top: 28px;
+  margin: 0 0 24px;
 
   padding: 12px 20px;
 
@@ -1501,4 +1507,112 @@ button {
 
 .event-menu-delete {
   color: #963c32;
+}
+
+.day-description {
+  margin: 6px 0 0;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  color: #963c32;
+}
+
+.day-hosts {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.host-portraits {
+  display: flex;
+  align-items: center;
+  background: transparent;
+}
+
+.host-portrait {
+  width: 54px;
+  height: 54px;
+
+  object-fit: contain;
+
+  background: transparent;
+  border: none;
+  border-radius: 0;
+
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.18));
+}
+
+.host-portrait:first-child {
+  margin-left: 0;
+  transform: rotate(-6deg);
+}
+
+.host-portrait:nth-child(2) {
+  transform: rotate(5deg);
+}
+
+.hosts-5 {
+  display: grid;
+  grid-template-columns: repeat(6, 22px);
+  grid-template-rows: repeat(2, 38px);
+
+  align-items: center;
+  justify-content: center;
+
+  width: 132px;
+}
+
+/* Two people on top */
+.hosts-5 .host-portrait:nth-child(1) {
+  grid-column: 2 / span 2;
+  grid-row: 1;
+}
+
+.hosts-5 .host-portrait:nth-child(2) {
+  grid-column: 4 / span 2;
+  grid-row: 1;
+}
+
+/* Three people underneath */
+.hosts-5 .host-portrait:nth-child(3) {
+  grid-column: 1 / span 2;
+  grid-row: 2;
+}
+
+.hosts-5 .host-portrait:nth-child(4) {
+  grid-column: 3 / span 2;
+  grid-row: 2;
+}
+
+.hosts-5 .host-portrait:nth-child(5) {
+  grid-column: 5 / span 2;
+  grid-row: 2;
+}
+
+.hosts-5 .host-portrait {
+  width: 44px;
+  height: 44px;
+
+  margin-left: 0;
+}
+
+.hosts-5 .host-portrait:nth-child(1) {
+  transform: rotate(-8deg);
+}
+
+.hosts-5 .host-portrait:nth-child(2) {
+  transform: rotate(6deg);
+}
+
+.hosts-5 .host-portrait:nth-child(3) {
+  transform: rotate(-5deg);
+}
+
+.hosts-5 .host-portrait:nth-child(4) {
+  transform: rotate(7deg);
+}
+
+.hosts-5 .host-portrait:nth-child(5) {
+  transform: rotate(-6deg);
 }
