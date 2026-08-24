@@ -279,10 +279,10 @@ function App() {
                   </p>
 
                   <p>
-                    What a group! To help you navigate these days, I suggest you
-                    play around a bit with this website. When you have an
-                    activity you want to do together with the group, fill in the
-                    form so that everyone else can see it.
+                    What a group! And in true Roman democratic fashion, everyone
+                    has been assigned a day and with it, absolute authority over
+                    what we do. Find your day below and add your activities once
+                    you've decided how we'll spend it!
                   </p>
 
                   <p className="postcard-remember">
