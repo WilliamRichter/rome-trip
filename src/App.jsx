@@ -248,7 +248,7 @@ function App() {
 
                 <div className="postcard-front-title">ROMA 2026 / 2027</div>
 
-                <div className="postcard-hint">Click if you dare!</div>
+                <div className="postcard-hint">Curious?</div>
               </div>
 
               <div className="postcard-back">
@@ -353,8 +353,7 @@ function App() {
           </div>
           <section className="overview-map-section">
             <div className="overview-map-heading">
-              <p className="eyebrow">OUR ROME</p>
-              <h2>Places we'll be visiting</h2>
+              <h2>Oh, the places we'll go!</h2>
             </div>
 
             <div className="overview-map">
@@ -377,9 +376,9 @@ function App() {
                 (arrival) => arrival.date === day.date,
               );
 
-              const eventsForDay = allEvents.filter(
-                (event) => event.date === day.date,
-              );
+              const eventsForDay = allEvents
+                .filter((event) => event.date === day.date)
+                .sort((a, b) => a.startTime.localeCompare(b.startTime));
 
               return (
                 <button
