@@ -4,7 +4,7 @@ export const tripDays = [
     shortDate: "30",
     weekday: "WED",
     owners: ["Person B"],
-    description: "Arrival day - getting ready and settling in",
+    description: "Arrival day - settling in 🛬",
     showHost: false,
   },
   {
@@ -12,7 +12,7 @@ export const tripDays = [
     shortDate: "31",
     weekday: "THU",
     owners: ["William", "Paula"],
-    description: "New Year's Eve",
+    description: "New Year's Eve 🍾 🎆",
     showHost: true,
   },
   {
@@ -20,7 +20,7 @@ export const tripDays = [
     shortDate: "01",
     weekday: "FRI",
     owners: ["Stella + Franco Richters"],
-    description: "New Year's Day",
+    description: "New Year's Day 🌅",
     showHost: true,
   },
   {
@@ -28,16 +28,14 @@ export const tripDays = [
     shortDate: "02",
     weekday: "SAT",
     owners: ["Kilian", "Jordana"],
-    description:
-      "Mom, Nonna, mother-in-law, and most importantly - BIRTHDAY GIRL",
-    showHost: true,
+    description: "Mom's / Nonna's / Mother-in-law's birthday! 🎂",
   },
   {
     date: "2027-01-03",
     shortDate: "03",
     weekday: "SUN",
     owners: ["Person F"],
-    description: "Departure day",
+    description: "Departure day 🛫",
     showHost: false,
   },
 ];

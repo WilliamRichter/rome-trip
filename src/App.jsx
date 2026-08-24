@@ -4,19 +4,12 @@ import { tripDays, staticPlaces, arrivals } from "./data/tripData";
 import { SearchBox } from "@mapbox/search-js-react";
 import "./styles.css";
 import TripMap from "./components/TripMap";
-
-const categorySymbols = {
-  museum: "◆",
-  food: "●",
-  activity: "✦",
-  drinks: "◉",
-};
+import { categorySymbols } from "./data/categories";
 
 function App() {
   const [viewMode, setViewMode] = useState("overview");
   const [selectedDate, setSelectedDate] = useState("2026-12-30");
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [manageMode, setManageMode] = useState(false);
   const [allEvents, setAllEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [postcardFlipped, setPostcardFlipped] = useState(false);
@@ -26,7 +19,10 @@ function App() {
     minutes: 0,
     seconds: 0,
   });
+  const [addActivityOpen, setAddActivityOpen] = useState(false);
+  const [openEventMenu, setOpenEventMenu] = useState(null);
 
+  const [editingEventId, setEditingEventId] = useState(null);
   const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
   const [form, setForm] = useState({
@@ -75,11 +71,29 @@ function App() {
       longitude: Number(form.longitude),
     };
 
-    const { data, error } = await supabase
-      .from("events")
-      .insert(databaseEvent)
-      .select()
-      .single();
+    let data;
+    let error;
+
+    if (editingEventId) {
+      const result = await supabase
+        .from("events")
+        .update(databaseEvent)
+        .eq("id", editingEventId)
+        .select()
+        .single();
+
+      data = result.data;
+      error = result.error;
+    } else {
+      const result = await supabase
+        .from("events")
+        .insert(databaseEvent)
+        .select()
+        .single();
+
+      data = result.data;
+      error = result.error;
+    }
 
     if (error) {
       console.error("Error adding event:", error);
@@ -111,6 +125,7 @@ function App() {
       latitude: "",
       longitude: "",
     });
+    setAddActivityOpen(false);
   }
 
   async function handleDeleteEvent(id) {
@@ -184,7 +199,7 @@ function App() {
   function openDay(date) {
     setSelectedDate(date);
     setSelectedEvent(null);
-    setManageMode(false);
+    setAddActivityOpen(false);
     setViewMode("day");
   }
   useEffect(() => {
@@ -264,9 +279,10 @@ function App() {
                   </p>
 
                   <p>
-                    Sounds like a lot? Fret not! Play around a bit with this
-                    website, and I'm sure we'll all look back on this trip
-                    fondly.
+                    What a group! To help you navigate these days, I suggest you
+                    play around a bit with this website. When you have an
+                    activity you want to do together with the group, fill in the
+                    form so that everyone else can see it.
                   </p>
 
                   <p className="postcard-remember">
@@ -351,7 +367,7 @@ function App() {
             </div>
           </section>
           <div className="overview-heading">
-            <p className="eyebrow">THE STAY AT A GLANCE</p>
+            <p className="eyebrow">OUR STAY AT A GLANCE</p>
             <h2>30 December — 3 January</h2>
           </div>
 
@@ -455,7 +471,7 @@ function App() {
                 onClick={() => {
                   setSelectedDate(day.date);
                   setSelectedEvent(null);
-                  setManageMode(false);
+                  setAddActivityOpen(false);
                 }}
               >
                 <span>{day.weekday}</span>
@@ -504,8 +520,6 @@ function App() {
                     </div>
 
                     <div className="event-details">
-                      <div className="category">{event.category}</div>
-
                       <h3>{event.name}</h3>
 
                       <p>{event.locationName}</p>
@@ -545,29 +559,79 @@ function App() {
                         )}
                       </div>
                     </div>
-                    {manageMode && (
+                    <div className="event-menu-wrapper">
                       <button
-                        className="delete-button"
+                        className="event-menu-button"
                         onClick={(clickEvent) => {
                           clickEvent.stopPropagation();
-                          handleDeleteEvent(event.id);
+
+                          setOpenEventMenu((current) =>
+                            current === event.id ? null : event.id,
+                          );
                         }}
                       >
-                        Delete this activity
+                        •••
                       </button>
-                    )}
+
+                      {openEventMenu === event.id && (
+                        <div
+                          className="event-menu"
+                          onClick={(clickEvent) => clickEvent.stopPropagation()}
+                        >
+                          <button
+                            className="event-menu-item"
+                            onClick={() => {
+                              setEditingEventId(event.id);
+
+                              setForm({
+                                name: event.name,
+                                category: event.category,
+                                startTime: event.startTime,
+                                locationName: event.locationName,
+                                address: event.address || "",
+                                websiteUrl: event.websiteUrl || "",
+                                latitude: event.latitude,
+                                longitude: event.longitude,
+                              });
+
+                              setAddActivityOpen(true);
+                              setOpenEventMenu(null);
+                            }}
+                          >
+                            Edit activity
+                          </button>
+
+                          <button
+                            className="event-menu-item event-menu-delete"
+                            onClick={() => {
+                              const confirmed = window.confirm(
+                                `Delete "${event.name}"?`,
+                              );
+
+                              if (confirmed) {
+                                handleDeleteEvent(event.id);
+                              }
+
+                              setOpenEventMenu(null);
+                            }}
+                          >
+                            Delete activity
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
               <button
-                className="manage-button"
-                onClick={() => setManageMode((current) => !current)}
+                className="add-activity-button"
+                onClick={() => setAddActivityOpen((current) => !current)}
               >
-                {manageMode ? "Done managing" : "Manage this day"}
+                {addActivityOpen ? "Cancel" : "+ Add activity"}
               </button>
-              {manageMode && (
+              {addActivityOpen && (
                 <form className="event-form" onSubmit={handleAddEvent}>
-                  <h3>Add event</h3>
+                  <h3>{editingEventId ? "Edit activity" : "Add activity"}</h3>
 
                   <label>
                     Name
@@ -662,7 +726,9 @@ function App() {
                     </div>
                   )}
 
-                  <button type="submit">Add event</button>
+                  <button type="submit">
+                    {editingEventId ? "Save changes" : "Add activity"}
+                  </button>
                 </form>
               )}
             </section>

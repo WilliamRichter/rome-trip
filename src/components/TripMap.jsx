@@ -1,22 +1,17 @@
 import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { categorySymbols } from "../data/categories";
 
-const hotelIcon = L.divIcon({
-  className: "static-place-marker",
-  html: `<div class="static-marker-icon">H</div>`,
-  iconSize: [36, 36],
-  iconAnchor: [18, 18],
-  popupAnchor: [0, -20],
-});
-
-const apartmentIcon = L.divIcon({
-  className: "static-place-marker",
-  html: `<div class="static-marker-icon">⌂</div>`,
-  iconSize: [36, 36],
-  iconAnchor: [18, 18],
-  popupAnchor: [0, -20],
-});
+function createMapIcon(symbol) {
+  return L.divIcon({
+    className: "map-marker",
+    html: `<div class="map-marker-inner">${symbol}</div>`,
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
+    popupAnchor: [0, -22],
+  });
+}
 
 function TripMap({
   events,
@@ -61,7 +56,11 @@ function TripMap({
 
     // Day-specific itinerary events
     events.forEach((event) => {
-      const marker = L.marker([event.latitude, event.longitude]);
+      const symbol = categorySymbols[event.category] || "📍";
+
+      const marker = L.marker([event.latitude, event.longitude], {
+        icon: createMapIcon(symbol),
+      });
 
       // Create readable date for this event
       const eventDate = new Date(`${event.date}T12:00:00`);
@@ -149,9 +148,11 @@ function TripMap({
 
     // Static places such as accommodation
     staticPlaces.forEach((place) => {
-      const icon = place.type === "hotel" ? hotelIcon : apartmentIcon;
+      const symbol = place.type === "hotel" ? "🏨" : "🏠";
 
-      const marker = L.marker([place.latitude, place.longitude], { icon });
+      const marker = L.marker([place.latitude, place.longitude], {
+        icon: createMapIcon(symbol),
+      });
 
       const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
         `${place.name} ${place.address || ""}`,

@@ -133,28 +133,11 @@ button {
   font-size: 13px;
 }
 
-.overview-arrival {
-  display: flex;
-
-  gap: 15px;
-
-  padding: 10px 0;
-
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-
-  font-size: 13px;
-}
-
 .overview-time {
   min-width: 50px;
 
-  font-weight: 700;
-}
-
-.overview-event-count {
   font-size: 12px;
-
-  opacity: 0.5;
+  font-weight: 700;
 }
 
 .overview-arrow {
@@ -173,11 +156,6 @@ button {
   padding: 10px 0;
 
   border-top: 1px solid rgba(0, 0, 0, 0.07);
-}
-
-.overview-time {
-  font-size: 12px;
-  font-weight: 700;
 }
 
 .overview-item-content {
@@ -670,15 +648,6 @@ button {
   text-align: center;
 }
 
-.countdown-label {
-  color: #a58118;
-
-  font-size: 10px;
-  font-weight: 700;
-
-  letter-spacing: 0.18em;
-}
-
 .countdown-numbers {
   display: flex;
   justify-content: center;
@@ -885,26 +854,35 @@ button {
   display: grid;
 
   grid-template-columns:
-    80px
-    30px
+    60px
+    38px
     1fr
     auto;
 
   width: 100%;
+  margin-bottom: 10px;
 
-  padding: 25px 5px;
+  gap: 8px;
 
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 18px;
+
+  border: 1px solid rgba(36, 33, 29, 0.08);
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.28);
 
   cursor: pointer;
 
   transition:
     background 0.2s ease,
-    transform 0.2s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .event-card:hover {
-  background: rgba(0, 0, 0, 0.025);
+  background: rgba(255, 255, 255, 0.55);
+
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
 }
 
 .event-card.selected {
@@ -919,26 +897,22 @@ button {
 }
 
 .event-symbol {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+
+  padding-top: 1px;
+
   color: #963c32;
-}
-
-.category {
-  margin-bottom: 5px;
-
-  font-size: 10px;
-
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-
-  opacity: 0.4;
+  font-size: 20px;
 }
 
 .event-details h3 {
-  margin: 0 0 5px;
+  margin: 0 0 4px;
 
-  font-family: Georgia, serif;
-  font-size: 25px;
-  font-weight: 400;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
 }
 
 .event-details p {
@@ -949,12 +923,17 @@ button {
   opacity: 0.55;
 }
 
+.event-details > p:first-of-type {
+  font-weight: 600;
+  opacity: 0.8;
+}
+
 .event-address {
-  margin-top: 4px !important;
+  margin-top: 3px !important;
 
-  font-size: 12px !important;
+  font-size: 11px !important;
 
-  opacity: 0.4 !important;
+  opacity: 0.5 !important;
 }
 
 .event-link {
@@ -995,75 +974,32 @@ button {
   min-height: 650px;
 }
 
-/* Static accommodation markers */
+/* =========================================================
+   MAP MARKERS
+   ========================================================= */
 
-.static-place-marker {
-  border: none;
-
+.map-marker {
   background: transparent;
+  border: none;
 }
 
-.static-marker-icon {
-  width: 36px;
-  height: 36px;
+.map-marker-inner {
+  width: 40px;
+  height: 40px;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
-  border: 3px solid #f2eee6;
+  border: 2px solid #f2eee6;
   border-radius: 50%;
 
-  background: #24211d;
-  color: #f2eee6;
+  background: rgba(255, 255, 255, 0.95);
 
-  font-family: Georgia, serif;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 21px;
+  line-height: 1;
 
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-}
-
-/* =========================================================
-   MANAGE MODE
-   ========================================================= */
-
-.manage-button {
-  margin-top: 32px;
-
-  padding: 12px 18px;
-
-  border: 1px solid #24211d;
-  border-radius: 999px;
-
-  background: transparent;
-  color: #24211d;
-
-  cursor: pointer;
-}
-
-.delete-button {
-  align-self: center;
-
-  margin-left: 20px;
-
-  padding: 8px 13px;
-
-  border: 1px solid rgba(150, 60, 50, 0.25);
-  border-radius: 999px;
-
-  background: transparent;
-  color: #963c32;
-
-  font-size: 11px;
-  font-weight: 700;
-
-  cursor: pointer;
-}
-
-.delete-button:hover {
-  background: rgba(150, 60, 50, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
 }
 
 /* =========================================================
@@ -1275,10 +1211,6 @@ button {
     text-align: center;
   }
 
-  .countdown-label {
-    font-size: 8px;
-  }
-
   .countdown-numbers {
     justify-content: center;
 
@@ -1325,21 +1257,8 @@ button {
   }
 
   .event-card {
-    grid-template-columns:
-      65px
-      25px
-      1fr;
-
+    grid-template-columns: 52px 30px 1fr auto;
     position: relative;
-  }
-
-  .delete-button {
-    grid-column: 3;
-
-    justify-self: start;
-
-    margin-top: 12px;
-    margin-left: 0;
   }
 
   /* Map */
@@ -1441,21 +1360,6 @@ button {
   min-height: 0;
 }
 
-.overview-map-tooltip {
-  text-align: center;
-}
-
-.overview-map-tooltip strong {
-  font-family: Georgia, serif;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.overview-map-tooltip span {
-  font-size: 11px;
-  opacity: 0.65;
-}
-
 .overview-map-popup {
   min-width: 120px;
 
@@ -1497,4 +1401,104 @@ button {
 
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.add-activity-button {
+  margin-top: 28px;
+
+  padding: 12px 20px;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: #963c32;
+  color: white;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.add-activity-button:hover {
+  transform: translateY(-1px);
+  background: #7f3028;
+}
+
+.event-menu-button {
+  align-self: start;
+
+  padding: 4px 8px;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: transparent;
+  color: #24211d;
+
+  font-size: 16px;
+  line-height: 1;
+
+  opacity: 0.45;
+
+  cursor: pointer;
+}
+
+.event-menu-button:hover {
+  background: rgba(0, 0, 0, 0.05);
+  opacity: 1;
+}
+
+.event-menu-wrapper {
+  position: relative;
+  align-self: start;
+}
+
+.event-menu {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  z-index: 20;
+
+  min-width: 145px;
+
+  padding: 6px;
+
+  border: 1px solid rgba(36, 33, 29, 0.12);
+  border-radius: 10px;
+
+  background: #fffaf1;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.event-menu-item {
+  display: block;
+
+  width: 100%;
+
+  padding: 9px 10px;
+
+  border: 0;
+  border-radius: 7px;
+
+  background: transparent;
+  color: #24211d;
+
+  text-align: left;
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+.event-menu-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.event-menu-delete {
+  color: #963c32;
 }
