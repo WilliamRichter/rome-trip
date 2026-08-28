@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "./lib/supabaseClient";
 import { tripDays, staticPlaces, arrivals } from "./data/tripData";
 import { SearchBox } from "@mapbox/search-js-react";
@@ -23,6 +23,7 @@ function App() {
   const [openEventMenu, setOpenEventMenu] = useState(null);
 
   const [editingEventId, setEditingEventId] = useState(null);
+  const formRef = useRef(null);
   const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
   const [form, setForm] = useState({
@@ -36,6 +37,109 @@ function App() {
     longitude: "",
   });
   const selectedDay = tripDays.find((day) => day.date === selectedDate);
+  const dayInfo = arrivals.filter((arrival) => arrival.date === selectedDate);
+
+  function normalizePlaceText(value = "") {
+    return value.toLowerCase().replace(/[’']/g, "").replace(/\s+/g, " ").trim();
+  }
+
+  function handleStaticPlaceSelected(place) {
+    setForm((current) => ({
+      ...current,
+      locationName: place.name,
+      address: place.address || "",
+      latitude: place.latitude,
+      longitude: place.longitude,
+    }));
+  }
+
+  function getStaticPlaceScore(place, query = "") {
+    const normalizedQuery = normalizePlaceText(query);
+    const normalizedPlaceName = normalizePlaceText(place.name);
+    const normalizedAddress = normalizePlaceText(place.address || "");
+
+    if (!normalizedQuery) {
+      return 0;
+    }
+
+    let score = 0;
+    const queryWords = normalizedQuery.split(" ").filter(Boolean);
+
+    if (normalizedPlaceName === normalizedQuery) score += 1000;
+    if (normalizedAddress === normalizedQuery) score += 900;
+    if (normalizedPlaceName.startsWith(normalizedQuery)) score += 500;
+    if (normalizedAddress.startsWith(normalizedQuery)) score += 450;
+    if (normalizedPlaceName.includes(normalizedQuery)) score += 300;
+    if (normalizedAddress.includes(normalizedQuery)) score += 250;
+
+    const matchingWords = queryWords.filter(
+      (word) =>
+        word.length > 1 &&
+        (normalizedPlaceName.includes(word) ||
+          normalizedAddress.includes(word)),
+    ).length;
+
+    if (matchingWords > 0) {
+      score += matchingWords * 60;
+    }
+
+    if (
+      queryWords.every(
+        (word) => word.length > 1 && normalizedPlaceName.includes(word),
+      )
+    ) {
+      score += 120;
+    }
+
+    if (
+      queryWords.every(
+        (word) => word.length > 1 && normalizedAddress.includes(word),
+      )
+    ) {
+      score += 100;
+    }
+
+    return score;
+  }
+
+  function buildStaticPlaceSuggestions(query = "") {
+    const normalizedQuery = normalizePlaceText(query);
+
+    if (!normalizedQuery) {
+      return [];
+    }
+
+    return staticPlaces
+      .map((place) => ({
+        place,
+        score: getStaticPlaceScore(place, normalizedQuery),
+      }))
+      .filter(({ score }) => score > 0)
+      .sort((a, b) => b.score - a.score)
+      .map(({ place }) => ({
+        name: place.name,
+        place_formatted: place.address || "Rome, Italy",
+        full_address: place.address || place.name,
+        address: place.address || "",
+        feature_type: "poi",
+        context: {},
+        language: "en",
+        maki: "marker",
+        poi_category: ["lodging"],
+        brand: "",
+        brand_id: "",
+        external_ids: {},
+        metadata: {
+          saved_place: true,
+          saved_place_id: place.id,
+        },
+        _geometry: {
+          type: "Point",
+          coordinates: [place.longitude, place.latitude],
+        },
+      }))
+      .slice(0, 5);
+  }
 
   const dayEvents = useMemo(() => {
     return allEvents
@@ -113,7 +217,15 @@ function App() {
       longitude: data.longitude,
     };
 
-    setAllEvents((current) => [...current, newEvent]);
+    setAllEvents((current) => {
+      if (editingEventId) {
+        return current.map((event) =>
+          event.id === editingEventId ? newEvent : event,
+        );
+      }
+
+      return [...current, newEvent];
+    });
 
     setForm({
       name: "",
@@ -125,6 +237,8 @@ function App() {
       latitude: "",
       longitude: "",
     });
+    setEditingEventId(null);
+    setSelectedEvent(data.id);
     setAddActivityOpen(false);
   }
 
@@ -180,6 +294,32 @@ function App() {
 
     if (!feature) return;
 
+    const matchedStaticPlace = staticPlaces.find((place) => {
+      const featureName = normalizePlaceText(feature.properties?.name || "");
+      const featureAddress = normalizePlaceText(
+        feature.properties?.full_address ||
+          feature.properties?.place_formatted ||
+          "",
+      );
+      const placeName = normalizePlaceText(place.name);
+      const placeAddress = normalizePlaceText(place.address || "");
+
+      return (
+        featureName === placeName ||
+        featureAddress === placeAddress ||
+        featureName.includes(placeName) ||
+        placeName.includes(featureName) ||
+        featureAddress === placeAddress ||
+        placeAddress.includes(featureAddress) ||
+        featureAddress.includes(placeAddress)
+      );
+    });
+
+    if (matchedStaticPlace) {
+      handleStaticPlaceSelected(matchedStaticPlace);
+      return;
+    }
+
     const [longitude, latitude] = feature.geometry.coordinates;
 
     setForm((current) => ({
@@ -197,11 +337,30 @@ function App() {
   }
 
   function openDay(date) {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "auto",
+    });
+
     setSelectedDate(date);
     setSelectedEvent(null);
     setAddActivityOpen(false);
     setViewMode("day");
   }
+  useEffect(() => {
+    if (!addActivityOpen || !formRef.current) return;
+
+    const timer = window.setTimeout(() => {
+      formRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 80);
+
+    return () => window.clearTimeout(timer);
+  }, [addActivityOpen, editingEventId]);
+
   useEffect(() => {
     const tripStart = new Date("2026-12-30T00:00:00+01:00");
 
@@ -248,7 +407,12 @@ function App() {
 
                 <div className="postcard-front-title">ROMA 2026 / 2027</div>
 
-                <div className="postcard-hint">Curious?</div>
+                <div
+                  className="postcard-hint"
+                  aria-label="Turn the postcard over"
+                >
+                  Tap to turn
+                </div>
               </div>
 
               <div className="postcard-back">
@@ -352,17 +516,21 @@ function App() {
             </div>
           </div>
           <section className="overview-map-section">
-            <div className="overview-map-heading">
-              <h2>Oh, the places we'll go!</h2>
+            <div className="overview-map-intro">
+              <div className="overview-map-heading">
+                <h2>Oh, the places we'll go!</h2>
+              </div>
             </div>
 
-            <div className="overview-map">
-              <TripMap
-                events={allEvents}
-                staticPlaces={staticPlaces}
-                selectedEvent={null}
-                overviewMode={true}
-              />
+            <div className="overview-map-frame">
+              <div className="overview-map">
+                <TripMap
+                  events={allEvents}
+                  staticPlaces={staticPlaces}
+                  selectedEvent={null}
+                  overviewMode={true}
+                />
+              </div>
             </div>
           </section>
           <div className="overview-heading">
@@ -415,7 +583,12 @@ function App() {
                         <span className="overview-time">{arrival.time}</span>
 
                         <div className="overview-item-content">
-                          <strong>{arrival.people}</strong>
+                          <div className="overview-item-meta">
+                            <span className="overview-tag overview-tag-logistics">
+                              Info
+                            </span>
+                            <strong>{arrival.people}</strong>
+                          </div>
                           <span>{arrival.detail}</span>
                         </div>
                       </div>
@@ -523,11 +696,61 @@ function App() {
                 )}
               </div>
               <button
+                type="button"
                 className="add-activity-button"
                 onClick={() => setAddActivityOpen((current) => !current)}
               >
                 {addActivityOpen ? "Cancel" : "+ Add activity"}
               </button>
+
+              {dayInfo.length > 0 && (
+                <div className="day-notes">
+                  {dayInfo.map((info) => {
+                    const mappedLocation = staticPlaces.find((place) => {
+                      const detailText = info.detail.toLowerCase();
+                      const placeName = place.name.toLowerCase();
+                      const placeAddress = (place.address || "").toLowerCase();
+
+                      return (
+                        detailText.includes(placeName) ||
+                        detailText.includes(placeAddress.split(",")[0].trim())
+                      );
+                    });
+
+                    const infoMapsQuery = mappedLocation
+                      ? `${mappedLocation.name} ${mappedLocation.address || ""}`
+                      : info.detail;
+
+                    return (
+                      <div className="day-note" key={info.id}>
+                        <div className="day-note-time">{info.time}</div>
+
+                        <div className="day-note-body">
+                          <div className="day-note-label">Info</div>
+                          <div className="day-note-text">{info.people}</div>
+                          <div className="day-note-detail">{info.detail}</div>
+
+                          <div className="event-actions maps-only">
+                            <a
+                              className="event-link"
+                              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                                infoMapsQuery,
+                              )}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(clickEvent) =>
+                                clickEvent.stopPropagation()
+                              }
+                            >
+                              Open in Maps ↗
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
 
               <div className="events">
                 {dayEvents.length === 0 && (
@@ -592,6 +815,7 @@ function App() {
                     </div>
                     <div className="event-menu-wrapper">
                       <button
+                        type="button"
                         className="event-menu-button"
                         onClick={(clickEvent) => {
                           clickEvent.stopPropagation();
@@ -610,6 +834,7 @@ function App() {
                           onClick={(clickEvent) => clickEvent.stopPropagation()}
                         >
                           <button
+                            type="button"
                             className="event-menu-item"
                             onClick={() => {
                               setEditingEventId(event.id);
@@ -633,6 +858,7 @@ function App() {
                           </button>
 
                           <button
+                            type="button"
                             className="event-menu-item event-menu-delete"
                             onClick={() => {
                               const confirmed = window.confirm(
@@ -656,7 +882,11 @@ function App() {
               </div>
 
               {addActivityOpen && (
-                <form className="event-form" onSubmit={handleAddEvent}>
+                <form
+                  ref={formRef}
+                  className="event-form"
+                  onSubmit={handleAddEvent}
+                >
                   <h3>{editingEventId ? "Edit activity" : "Add activity"}</h3>
 
                   <label>
@@ -680,6 +910,7 @@ function App() {
                       <option value="museum">Museum</option>
                       <option value="food">Food</option>
                       <option value="drinks">Drinks</option>
+                      <option value="coffee">Coffee</option>
                     </select>
                   </label>
 
@@ -702,15 +933,47 @@ function App() {
                     <SearchBox
                       accessToken={mapboxToken}
                       value={form.locationName}
-                      onChange={(value) =>
+                      onChange={(value) => {
                         setForm((current) => ({
                           ...current,
                           locationName: value,
                           latitude: "",
                           longitude: "",
-                        }))
-                      }
-                      onRetrieve={handlePlaceSelected}
+                        }));
+                      }}
+                      componentOptions={{
+                        customSearch: async (text) => {
+                          const matches = buildStaticPlaceSuggestions(text);
+                          return matches;
+                        },
+                      }}
+                      onRetrieve={(result) => {
+                        const feature = result.features?.[0];
+
+                        if (!feature) return;
+
+                        const savedPlace = staticPlaces.find((place) => {
+                          const sameName =
+                            normalizePlaceText(place.name) ===
+                            normalizePlaceText(feature.properties?.name || "");
+                          const sameAddress =
+                            normalizePlaceText(place.address || "") ===
+                            normalizePlaceText(
+                              feature.properties?.full_address ||
+                                feature.properties?.place_formatted ||
+                                "",
+                            );
+
+                          return sameName || sameAddress;
+                        });
+
+                        if (savedPlace) {
+                          handleStaticPlaceSelected(savedPlace);
+                          return;
+                        }
+
+                        handlePlaceSelected(result);
+                      }}
                       placeholder="Search Rome..."
                       options={{
                         language: "en",

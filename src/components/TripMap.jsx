@@ -25,6 +25,7 @@ function TripMap({
   const eventLayer = useRef(null);
   const staticLayer = useRef(null);
   const markers = useRef({});
+  const staticMarkers = useRef({});
 
   useEffect(() => {
     if (mapInstance.current) return;
@@ -51,11 +52,59 @@ function TripMap({
     eventLayer.current.clearLayers();
     staticLayer.current.clearLayers();
     markers.current = {};
+    staticMarkers.current = {};
 
     const bounds = [];
 
+    const matchesStaticPlace = (
+      place,
+      latitude,
+      longitude,
+      locationName,
+      address,
+    ) => {
+      const lat = Number(latitude);
+      const lng = Number(longitude);
+
+      const sameCoordinates =
+        Math.abs(Number(place.latitude) - lat) < 0.0005 &&
+        Math.abs(Number(place.longitude) - lng) < 0.0005;
+
+      const samePlaceName =
+        (place.name || "").trim().toLowerCase() ===
+        (locationName || "").trim().toLowerCase();
+
+      const sameAddress =
+        (place.address || "").trim().toLowerCase() ===
+        (address || "").trim().toLowerCase();
+
+      return sameCoordinates || samePlaceName || sameAddress;
+    };
+
+    const isAccommodationLocation = (
+      latitude,
+      longitude,
+      locationName,
+      address,
+    ) => {
+      return staticPlaces.some((place) =>
+        matchesStaticPlace(place, latitude, longitude, locationName, address),
+      );
+    };
+
     // Day-specific itinerary events
     events.forEach((event) => {
+      if (
+        isAccommodationLocation(
+          event.latitude,
+          event.longitude,
+          event.locationName,
+          event.address,
+        )
+      ) {
+        return;
+      }
+
       const symbol = categorySymbols[event.category] || "📍";
 
       const marker = L.marker([event.latitude, event.longitude], {
@@ -149,6 +198,17 @@ function TripMap({
     // Static places such as accommodation
     staticPlaces.forEach((place) => {
       const symbol = place.type === "hotel" ? "🏨" : "🏠";
+      const matchingEvents = events
+        .filter((event) =>
+          matchesStaticPlace(
+            place,
+            event.latitude,
+            event.longitude,
+            event.locationName,
+            event.address,
+          ),
+        )
+        .sort((a, b) => a.startTime.localeCompare(b.startTime));
 
       const marker = L.marker([place.latitude, place.longitude], {
         icon: createMapIcon(symbol),
@@ -157,6 +217,12 @@ function TripMap({
       const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
         `${place.name} ${place.address || ""}`,
       )}`;
+
+      if (onSelectEvent && matchingEvents.length > 0) {
+        marker.on("click", () => {
+          onSelectEvent(matchingEvents[0].id);
+        });
+      }
 
       if (overviewMode) {
         marker.bindPopup(`
@@ -169,6 +235,19 @@ function TripMap({
       </div>
     `);
       } else {
+        const extraDetail = matchingEvents.length
+          ? `<div class="map-popup-note"><strong>Also today:</strong><br />${matchingEvents
+              .map(
+                (event) =>
+                  `${event.startTime} · ${event.name}${
+                    event.locationName && event.locationName !== place.name
+                      ? ` at ${event.locationName}`
+                      : ""
+                  }`,
+              )
+              .join("<br />")}</div>`
+          : "";
+
         marker.bindPopup(`
       <div class="map-popup">
         <strong>${place.name}</strong>
@@ -183,6 +262,8 @@ function TripMap({
 
         ${place.description ? `<br />${place.description}` : ""}
 
+        ${extraDetail}
+
         <div class="map-popup-actions">
           <a
             href="${mapsUrl}"
@@ -196,7 +277,9 @@ function TripMap({
     `);
       }
 
+      staticMarkers.current[place.id] = marker;
       marker.addTo(staticLayer.current);
+      bounds.push([place.latitude, place.longitude]);
     });
 
     if (bounds.length === 1) {
@@ -211,18 +294,41 @@ function TripMap({
   useEffect(() => {
     if (!selectedEvent) return;
 
-    const marker = markers.current[selectedEvent];
+    const eventMarker = markers.current[selectedEvent];
 
-    if (!marker) return;
+    if (eventMarker) {
+      const position = eventMarker.getLatLng();
 
-    const position = marker.getLatLng();
+      mapInstance.current.flyTo(position, 16, {
+        duration: 0.8,
+      });
 
-    mapInstance.current.flyTo(position, 16, {
+      eventMarker.openPopup();
+      return;
+    }
+
+    const matchedEvent = events.find((event) => event.id === selectedEvent);
+
+    if (!matchedEvent) return;
+
+    const fallbackMarker = Object.values(staticMarkers.current).find(
+      (marker) => {
+        const { lat, lng } = marker.getLatLng();
+        return (
+          Math.abs(Number(lat) - Number(matchedEvent.latitude)) < 0.0005 &&
+          Math.abs(Number(lng) - Number(matchedEvent.longitude)) < 0.0005
+        );
+      },
+    );
+
+    if (!fallbackMarker) return;
+
+    mapInstance.current.flyTo(fallbackMarker.getLatLng(), 16, {
       duration: 0.8,
     });
 
-    marker.openPopup();
-  }, [selectedEvent]);
+    fallbackMarker.openPopup();
+  }, [selectedEvent, events]);
 
   return <div ref={mapContainer} className="map" />;
 }

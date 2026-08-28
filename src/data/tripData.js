@@ -81,39 +81,6 @@ export const tripDays = [
   },
 ];
 
-export const events = [
-  {
-    id: 1,
-    date: "2026-12-30",
-    startTime: "10:30",
-    name: "Museum placeholder",
-    category: "museum",
-    locationName: "Placeholder museum",
-    latitude: 41.9142,
-    longitude: 12.4922,
-  },
-  {
-    id: 2,
-    date: "2026-12-30",
-    startTime: "13:00",
-    name: "Lunch placeholder",
-    category: "food",
-    locationName: "Placeholder restaurant",
-    latitude: 41.9106,
-    longitude: 12.4931,
-  },
-  {
-    id: 3,
-    date: "2026-12-31",
-    startTime: "16:00",
-    name: "Afternoon activity",
-    category: "activity",
-    locationName: "Placeholder location",
-    latitude: 41.9009,
-    longitude: 12.4833,
-  },
-];
-
 export const staticPlaces = [
   {
     id: "hotel",
@@ -131,7 +98,7 @@ export const staticPlaces = [
     latitude: 41.89669103691434,
     longitude: 12.464601485684447,
     address: "Via della Lungara 40, Rome",
-    description: "Apartment for sister and family",
+    description: "",
   },
 ];
 

@@ -3,4 +3,5 @@ export const categorySymbols = {
   food: "🍴",
   activity: "✨",
   drinks: "🍸",
+  coffee: "☕",
 };
