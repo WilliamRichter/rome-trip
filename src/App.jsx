@@ -6,6 +6,9 @@ import "./styles.css";
 import TripMap from "./components/TripMap";
 import { categorySymbols } from "./data/categories";
 
+const SITE_PASSWORD = import.meta.env.VITE_SITE_PASSWORD || "rome2027";
+const ACCESS_KEY = "diedenrichter-site-access";
+
 function App() {
   const [viewMode, setViewMode] = useState("overview");
   const [selectedDate, setSelectedDate] = useState("2026-12-30");
@@ -13,6 +16,26 @@ function App() {
   const [allEvents, setAllEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [postcardFlipped, setPostcardFlipped] = useState(false);
+  const [gateFlipped, setGateFlipped] = useState(false);
+  const [revealStarted, setRevealStarted] = useState(false);
+  const [isUnlocked, setIsUnlocked] = useState(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+
+    const isLocalhost =
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1";
+
+    if (isLocalhost) {
+      return false;
+    }
+
+    return window.localStorage.getItem(ACCESS_KEY) === SITE_PASSWORD;
+  });
+  const [passwordInput, setPasswordInput] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [showRevealTitle, setShowRevealTitle] = useState(false);
   const [countdown, setCountdown] = useState({
     days: 0,
     hours: 0,
@@ -38,6 +61,32 @@ function App() {
   });
   const selectedDay = tripDays.find((day) => day.date === selectedDate);
   const dayInfo = arrivals.filter((arrival) => arrival.date === selectedDate);
+
+  function handleUnlock(event) {
+    event.preventDefault();
+
+    if (passwordInput === SITE_PASSWORD) {
+      const isLocalhost =
+        window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1";
+
+      if (!isLocalhost) {
+        window.localStorage.setItem(ACCESS_KEY, SITE_PASSWORD);
+      }
+
+      setPasswordError("");
+      setPasswordInput("");
+      setShowRevealTitle(true);
+
+      window.setTimeout(() => {
+        setShowRevealTitle(false);
+        setIsUnlocked(true);
+      }, 6200);
+      return;
+    }
+
+    setPasswordError("Incorrect password.");
+  }
 
   function normalizePlaceText(value = "") {
     return value.toLowerCase().replace(/[’']/g, "").replace(/\s+/g, " ").trim();
@@ -392,6 +441,60 @@ function App() {
 
     return () => clearInterval(timer);
   }, []);
+
+  const revealPhrase = "All roads lead to...".split("");
+
+  if (showRevealTitle) {
+    return (
+      <div className="private-gate private-gate-reveal-screen">
+        <div className="private-gate-reveal-text" aria-live="polite">
+          {revealPhrase.map((letter, index) => (
+            <span
+              key={`${letter}-${index}`}
+              className={`private-gate-reveal-letter${letter === " " ? " is-space" : ""}`}
+              style={{ animationDelay: `${index * 112}ms` }}
+            >
+              {letter === " " ? "\u00A0" : letter}
+            </span>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (!isUnlocked) {
+    return (
+      <div className="private-gate">
+        <div className="private-gate-card">
+          <div className="private-gate-header">
+            <span className="private-gate-kicker">Invitation</span>
+            <h1>Enter password</h1>
+          </div>
+
+          <div className="private-gate-divider" aria-hidden="true" />
+
+          <form onSubmit={handleUnlock} className="private-gate-form">
+            <label htmlFor="site-password">Password</label>
+            <input
+              id="site-password"
+              type="password"
+              value={passwordInput}
+              onChange={(event) => setPasswordInput(event.target.value)}
+              placeholder="Enter password"
+              autoComplete="current-password"
+            />
+
+            {passwordError && (
+              <p className="private-gate-error">{passwordError}</p>
+            )}
+
+            <button type="submit">Enter</button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="app">
       {viewMode === "overview" ? (
@@ -432,7 +535,7 @@ function App() {
                     with a previously unseen combination of individuals. Let's
                     call them{" "}
                     <span className="group-name">
-                      Dieden Franco Richter & Friends
+                      Dieden Franco Richter &amp; Friends
                     </span>{" "}
                     for now. And you, being a member of this group, are DEARLY
                     invited.
@@ -499,7 +602,7 @@ function App() {
                     <div className="invite-recipient">
                       An Honorary Member of
                       <br />
-                      Dieden Franco Richter & Friends
+                      Dieden Franco Richter &amp; Friends
                     </div>
 
                     <div className="invite-divider">

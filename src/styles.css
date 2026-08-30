@@ -20,6 +20,256 @@ button {
   -webkit-tap-highlight-color: transparent;
 }
 
+.private-gate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 100vh;
+  padding: 32px 20px;
+
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.86), transparent 36%),
+    linear-gradient(135deg, #f7f0e5 0%, #eddfc8 45%, #e2c89d 100%);
+}
+
+.private-gate-card {
+  position: relative;
+
+  width: min(500px, 100%);
+  padding: 34px 30px 28px;
+
+  border: 2px solid rgba(146, 97, 32, 0.75);
+  border-radius: 26px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.48),
+      rgba(255, 249, 238, 0.7)
+    ),
+    #f8f2e8;
+  box-shadow:
+    inset 0 0 0 2px rgba(145, 103, 53, 0.2),
+    0 24px 50px rgba(72, 48, 30, 0.18);
+}
+
+.private-gate-card::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+
+  border: 1px solid rgba(130, 96, 38, 0.32);
+  border-radius: 18px;
+  pointer-events: none;
+}
+
+.private-gate-postmark {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+
+  width: 72px;
+  height: 72px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid rgba(128, 86, 32, 0.75);
+  border-radius: 50%;
+
+  color: #8b5c2e;
+
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transform: rotate(12deg);
+}
+
+.private-gate-header {
+  position: relative;
+  z-index: 1;
+
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.private-gate-kicker {
+  display: inline-block;
+  margin-bottom: 10px;
+
+  color: #7a3a2f;
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.private-gate-card h1 {
+  margin: 0;
+
+  color: #2b1c15;
+
+  font-family: Georgia, serif;
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 600;
+  font-style: italic;
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+}
+
+.private-gate-divider {
+  width: 88px;
+  height: 2px;
+
+  margin: 16px auto 18px;
+
+  background: linear-gradient(90deg, transparent, #c5984b, transparent);
+}
+
+.private-gate-copy {
+  position: relative;
+  z-index: 1;
+
+  margin: 0 0 22px;
+
+  color: rgba(43, 28, 21, 0.8);
+
+  font-size: 15px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+.private-gate-form {
+  position: relative;
+  z-index: 1;
+
+  display: grid;
+  gap: 12px;
+  text-align: left;
+}
+
+.private-gate-form label {
+  color: #3d2a24;
+
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.private-gate-form input {
+  width: 100%;
+  padding: 14px 14px;
+
+  border: 1px solid rgba(60, 41, 29, 0.18);
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.8);
+  color: #2b1c15;
+
+  font: inherit;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.private-gate-form input::placeholder {
+  color: rgba(43, 28, 21, 0.42);
+}
+
+.private-gate-form button {
+  margin-top: 6px;
+  padding: 14px 18px;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: linear-gradient(135deg, #a64b3d, #7b332d);
+  color: #fffaf3;
+
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(122, 58, 47, 0.2);
+}
+
+.private-gate-error {
+  margin: 0;
+
+  color: #8b3d35;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.private-gate-reveal-screen {
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.8), transparent 32%),
+    linear-gradient(135deg, #f7f0e5 0%, #e7d2ab 100%);
+}
+
+.private-gate-reveal-text {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+
+  max-width: min(940px, 92vw);
+
+  color: #2b1c15;
+
+  font-family:
+    "Segoe Script", "Lucida Handwriting", "Bradley Hand", "Apple Chancery",
+    cursive;
+  font-size: clamp(58px, 9vw, 126px);
+  font-style: italic;
+  line-height: 0.8;
+  letter-spacing: 0.03em;
+  text-align: center;
+  text-shadow: 0 3px 18px rgba(43, 28, 21, 0.08);
+}
+
+.private-gate-reveal-letter {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(44px) rotate(12deg) scale(0.8);
+  animation: reveal-letter 2.32s cubic-bezier(0.2, 0.8, 0.22, 1) forwards;
+  transform-origin: center bottom;
+  filter: blur(0.2px);
+}
+
+.private-gate-reveal-letter.is-space {
+  width: 0.46em;
+}
+
+@keyframes reveal-letter {
+  0% {
+    opacity: 0;
+    transform: translateY(44px) rotate(12deg) scale(0.8);
+  }
+  20% {
+    opacity: 0.15;
+    transform: translateY(30px) rotate(7deg) scale(0.9);
+  }
+  45% {
+    opacity: 0.8;
+    transform: translateY(12px) rotate(-2deg) scale(1.02);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(2px) rotate(1deg) scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+}
+
 .app {
   min-height: 100vh;
 }
@@ -287,7 +537,30 @@ button {
 
   perspective: 1400px;
 
+  opacity: 0;
+  transform: translateY(-42vh) scale(0.78) rotateX(20deg);
+  animation: postcard-drop-in 3.8s cubic-bezier(0.16, 0.7, 0.18, 1) forwards;
+
   cursor: pointer;
+}
+
+@keyframes postcard-drop-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-42vh) scale(0.78) rotateX(20deg);
+  }
+  30% {
+    opacity: 0.6;
+    transform: translateY(12px) scale(0.94) rotateX(8deg);
+  }
+  58% {
+    opacity: 1;
+    transform: translateY(4px) scale(1.01) rotateX(2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0deg);
+  }
 }
 
 .postcard-inner {
@@ -442,17 +715,17 @@ button {
 .postcard-hint {
   position: absolute;
 
-  right: 24px;
-  bottom: 22px;
+  left: 50%;
+  top: 18%;
 
   z-index: 4;
 
-  padding: 8px 12px;
+  padding: 10px 16px;
 
-  border: 1px solid #b88a32;
+  border: 1px solid rgba(255, 241, 199, 0.8);
   border-radius: 999px;
 
-  background: #d4af5c;
+  background: rgba(212, 175, 92, 0.9);
   color: #1f1a17;
 
   font-size: 10px;
@@ -460,7 +733,8 @@ button {
   letter-spacing: 0.12em;
   text-transform: uppercase;
 
-  box-shadow: 0 6px 16px rgba(66, 48, 0, 0.12);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
 }
 
 .postcard.flipped .postcard-front {
@@ -516,6 +790,48 @@ button {
   font-weight: 700;
 
   letter-spacing: 0.02em;
+}
+
+.group-name {
+  display: inline;
+
+  font: inherit;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+
+  background: linear-gradient(
+    90deg,
+    #4a0f0f,
+    #721c18,
+    #a52a24,
+    #d14a3d,
+    #7b1717,
+    #4a0f0f
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow: 0 0 10px rgba(130, 24, 20, 0.28);
+
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.45));
+  animation: invite-glitter 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes invite-glitter {
+  0% {
+    filter: drop-shadow(0 0 2px rgba(120, 18, 16, 0.25));
+    background-position: 0% 50%;
+  }
+  50% {
+    filter: drop-shadow(0 0 8px rgba(188, 48, 40, 0.45));
+    background-position: 100% 50%;
+  }
+  100% {
+    filter: drop-shadow(0 0 10px rgba(115, 17, 15, 0.4));
+    background-position: 60% 50%;
+  }
 }
 
 .postcard-remember {
