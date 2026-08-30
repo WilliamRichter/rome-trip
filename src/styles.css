@@ -1620,7 +1620,16 @@ button {
   }
 
   .postcard-stamp {
-    display: none;
+    position: absolute;
+
+    top: -20px;
+    right: 8px;
+
+    width: 80px;
+
+    transform: rotate(3deg);
+
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.12));
   }
 
   .postcard-stamp img {
