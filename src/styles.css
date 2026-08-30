@@ -1594,7 +1594,7 @@ button {
     display: flex;
     flex-direction: column;
 
-    padding: 28px 24px 34px;
+    padding: 16px 24px 34px;
   }
 
   .postcard-message {
