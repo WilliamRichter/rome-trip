@@ -8,6 +8,7 @@ import { categorySymbols } from "./data/categories";
 
 const SITE_PASSWORD = import.meta.env.VITE_SITE_PASSWORD || "rome2027";
 const ACCESS_KEY = "diedenrichter-site-access";
+const PASSWORD_EXPIRY_DAYS = 7; // Re-enter password after 7 days
 
 function App() {
   const [viewMode, setViewMode] = useState("overview");
@@ -31,7 +32,29 @@ function App() {
       return false;
     }
 
-    return window.localStorage.getItem(ACCESS_KEY) === SITE_PASSWORD;
+    // Check if password exists and hasn't expired
+    const storedPassword = window.localStorage.getItem(ACCESS_KEY);
+    const storedTimestamp = window.localStorage.getItem(
+      ACCESS_KEY + "_timestamp",
+    );
+
+    if (storedPassword !== SITE_PASSWORD || !storedTimestamp) {
+      return false;
+    }
+
+    // Check if 7 days have passed
+    const now = Date.now();
+    const elapsedMs = now - parseInt(storedTimestamp, 10);
+    const expiryMs = PASSWORD_EXPIRY_DAYS * 24 * 60 * 60 * 1000;
+
+    if (elapsedMs > expiryMs) {
+      // Password expired, clear it
+      window.localStorage.removeItem(ACCESS_KEY);
+      window.localStorage.removeItem(ACCESS_KEY + "_timestamp");
+      return false;
+    }
+
+    return true;
   });
   const [passwordInput, setPasswordInput] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -72,6 +95,10 @@ function App() {
 
       if (!isLocalhost) {
         window.localStorage.setItem(ACCESS_KEY, SITE_PASSWORD);
+        window.localStorage.setItem(
+          ACCESS_KEY + "_timestamp",
+          Date.now().toString(),
+        );
       }
 
       setPasswordError("");
